@@ -1,21 +1,32 @@
-#------------------------------------------------------------------------------*
-# Prepare shapefiles for sampling ----
-#------------------------------------------------------------------------------*
+---
+title: Sampling for HAPIN first stage - clusters
+author: Oscar de León
+date: 2017-05-11
+output:
+  pdf_document: default
+  html_document: default
+---
 
+
+```{r setup}
 # Load used packages
-# library(package = "raster")
 library(package = "raster")
 library(package = "rgeos")
 library(package = "maptools")
 library(package = "tidyverse")
 
+# Configure knitr
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_knit$set(root.dir = "..")
+```
 
 
 
-#------------------------------------------------------------------------------*
-# Define study parameters ----
-#------------------------------------------------------------------------------*
 
+# Define parameters
+
+
+```{r sampling-parameters, echo=TRUE}
 # Population parameters
 household_size <- 6                                # people per household
 
@@ -27,15 +38,17 @@ n_clusters <- ceiling(sample_size / cluster_size)  # enough clusters for ss
 # Inefficiency
 response <- 2/3                                # proportion contacted included
 suitable <- 4/5                                # proportion of suitable clusters
-adj_clusters <- ceiling(n_clusters / suitable)
+adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
+
+```
 
 
 
 
-#------------------------------------------------------------------------------*
-# Get limits data ----
-#------------------------------------------------------------------------------*
+# Political limits
 
+
+```{r get-limits-data}
 # Set included municipalities
 included <- c("Jalapa", "San Pedro Pinula")
 
@@ -59,13 +72,14 @@ excluded <- readShapePoly(
 
 # Subtract excluded areas
 study_area <- gDifference(study_munis, excluded)
+```
 
 
 
 
-#------------------------------------------------------------------------------*
-# Get density data ----
-#------------------------------------------------------------------------------*
+# Population density
+
+```{r get-density-data}
 
 # Read in rasters
 pop_density <- raster(x = "data/jalapa_density.gri")
@@ -87,14 +101,15 @@ cluster_side <- ceiling(sqrt(adj_cluster_pop))
 
 # Aggregate population cells
 cluster_cells <- aggregate(study_density, fact = cluster_side, fun = sum)
+```
 
 
 
 
-#------------------------------------------------------------------------------*
-# Sample clusters ----
-#------------------------------------------------------------------------------*
+# Sampling clusters
 
+
+```{r sample-clusters}
 # Set seed for reproducibility
 set.seed(2017-05)
 
@@ -144,14 +159,12 @@ cluster_polygons <- SpatialPolygonsDataFrame(
   data = clusters,
   match.ID = TRUE
 )
+```
 
 
 
 
-#------------------------------------------------------------------------------*
-# Write sampling data ----
-#------------------------------------------------------------------------------*
-
+```{r write-data}
 # Write cluster data
 write_csv(clusters, path = "output/clusters.csv")
 
@@ -201,32 +214,6 @@ clusters <- clusters %>%
     data = .data,
     cell = get_tile(cluster = ., save_path = "output/cluster_satellite")
   )
+```
 
-
-#------------------------------------------------------------------------------*
-# Plot everything ----
-#------------------------------------------------------------------------------*
-
-# Plot raw data
-png(filename = "output/map_areas.png", width = 5, height = 5, units = "in", res = 600)
-plot(study_density)
-title("Raw population density\nand study areas")
-plot(jalapa, add = TRUE, asp = 1)
-plot(excluded, add = TRUE, col = "grey20", asp = 1)
-lines(study_munis, col = "red")
-dev.off()
-
-
-# Plot aggregated density and sampled clusters
-png(filename = "output/map_clusters.png", width = 5, height = 5, units = "in", res = 600)
-plot(cluster_cells)
-title("Aggregated population density\nand selected clusters")
-plot(jalapa, add = TRUE, asp = 1)
-plot(cluster_polygons, add = TRUE, asp = 1)
-points(centers, pch = ".")
-dev.off()
-
-
-
-# End of script
 

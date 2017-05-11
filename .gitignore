@@ -8,6 +8,7 @@ data/
 
 # Output files
 output/
+*.html
 
 # Qgis files
 *.qgs*
