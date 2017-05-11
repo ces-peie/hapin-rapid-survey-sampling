@@ -164,15 +164,25 @@ cluster_cells <- aggregate(study_density, fact = cluster_side, fun = sum)
 ```
 
 
-```{r pop-density}
+```{r pop-density, results='hold', out.width="0.5\\linewidth"}
 # Raw density
+dpar <- par()
+par(mar = c(2, 2, 3, 1))
 plot(study_density)
 title("Fig. 4: Raw population density\nand study areas")
 plot(jalapa, add = TRUE, asp = 1)
 plot(excluded, add = TRUE, col = "grey20", asp = 1)
 lines(study_munis, col = "red")
-```
+par(dpar)
 
+# Raw density
+hist(
+  study_density, maxpixels = 1e6,
+  breaks = seq(0, ceiling(max(study_density[], na.rm = TRUE))),
+  xlab = "Count in cells", ylab = "n",
+  main = "Fig. 5: Distribution of population density values"
+)
+```
 
 
 
@@ -240,7 +250,7 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
-title("Fig. 5: Aggregated population density and selected clusters")
+title("Fig. 6: Aggregated population density and selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
 lines(excluded, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
