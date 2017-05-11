@@ -92,12 +92,30 @@ jalapa <- municipalities %>%
 study_munis <- jalapa %>%
   subset(MUNICIPIO %in% included)
 
+# Get top left corner
+top_left <-  study_munis %>%
+  bbox %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "direction") %>%
+  gather(variable, coordinate, -direction) %>%
+  group_by(direction) %>%
+  slice(which.max(abs(coordinate))) %>%
+  select(direction, coordinate) %>%
+  spread(direction, coordinate) %>%
+  set_names(toupper(names(.)))
+
 # Read exluded areas
 excluded_communities <- "./data/jalapa-excluded-communities.csv" %>%
   # Get the list
   read_csv() %>%
   filter(
     !NUEVO_COD %in% c(2101222, 2101047)
+  ) %>%
+  # Extend west and north
+  bind_rows(
+    .,
+    top_left,
+    mutate(top_left, Y = min(.$Y))
   ) %>%
   # Convert to spatial object
   SpatialPointsDataFrame(
@@ -117,7 +135,9 @@ jalapa_metro <- readShapePoly(
 excluded_hull <- excluded_communities %>%
   gConvexHull() %>%
   # Join with Jalapa "metro" area
-  gUnion(jalapa_metro)
+  gUnion(jalapa_metro) %>%
+  # Intersect with study municipalities
+  gIntersection(study_munis)
 
 # Subtract excluded areas
 study_area <- gDifference(study_munis, excluded_hull)
