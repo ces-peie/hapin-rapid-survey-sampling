@@ -75,6 +75,63 @@ study_area <- gDifference(study_munis, excluded)
 ```
 
 
+```{r geo-limits, results='hold', out.width="0.33\\linewidth"}
+# Base political limits
+plot(jalapa)
+title("Fig. 1: Jalapa municipalities")
+text(
+  coordinates(jalapa),
+  labels = gsub(
+    pattern = " ",
+    replacement = "\n",
+    x = iconv(
+      x = as.character(jalapa$MUNICIPIO),
+      from = "Latin1",
+      to = "ASCII//TRANSLIT"
+    )
+  ),
+  cex=0.6
+)
+
+# Selected municipalities
+plot(jalapa, col = "grey90")
+plot(study_munis, col = "white", add = TRUE)
+title("Fig. 2: Municipalities included in study")
+text(
+  coordinates(study_munis),
+  labels = gsub(
+    pattern = " ",
+    replacement = "\n",
+    x = iconv(
+      x = as.character(study_munis$MUNICIPIO),
+      from = "Latin1",
+      to = "ASCII//TRANSLIT"
+    )
+  ),
+  cex=0.6
+)
+
+# Excluded areas
+plot(jalapa, col = "grey90")
+plot(study_munis, col = "white", add = TRUE)
+plot(excluded, col = "grey40", add = TRUE)
+title("Fig. 3: Excluded areas")
+text(
+  coordinates(study_munis) - matrix(c(0, -0.02, 0, 0.05), ncol = 2),
+  labels = gsub(
+    pattern = " ",
+    replacement = "\n",
+    x = iconv(
+      x = as.character(study_munis$MUNICIPIO),
+      from = "Latin1",
+      to = "ASCII//TRANSLIT"
+    )
+  ),
+  cex=0.6
+)
+```
+
+
 
 
 # Population density
@@ -101,6 +158,16 @@ cluster_side <- ceiling(sqrt(adj_cluster_pop))
 
 # Aggregate population cells
 cluster_cells <- aggregate(study_density, fact = cluster_side, fun = sum)
+```
+
+
+```{r pop-density}
+# Raw density
+plot(study_density)
+title("Fig. 4: Raw population density\nand study areas")
+plot(jalapa, add = TRUE, asp = 1)
+plot(excluded, add = TRUE, col = "grey20", asp = 1)
+lines(study_munis, col = "red")
 ```
 
 
@@ -160,6 +227,18 @@ cluster_polygons <- SpatialPolygonsDataFrame(
   match.ID = TRUE
 )
 ```
+
+
+
+```{r clusters-density}
+plot(cluster_cells)
+title("Fig. 5: Aggregated population density\nand selected clusters")
+plot(jalapa, add = TRUE, asp = 1)
+plot(cluster_polygons, add = TRUE, asp = 1)
+points(centers, pch = ".")
+```
+
+
 
 
 
