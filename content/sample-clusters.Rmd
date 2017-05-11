@@ -161,6 +161,10 @@ cluster_side <- ceiling(sqrt(adj_cluster_pop))
 
 # Aggregate population cells
 cluster_cells <- aggregate(study_density, fact = cluster_side, fun = sum)
+
+# Percent with enough estimated households
+cluster_ecdf <- ecdf(cluster_cells[])
+percent_small <- ceiling(cluster_ecdf(cluster_size / response)*100)
 ```
 
 
