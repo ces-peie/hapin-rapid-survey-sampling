@@ -164,7 +164,7 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 
 
 
-```{r write-data}
+```{r write-data, cache=TRUE}
 # Write cluster data
 write_csv(clusters, path = "output/clusters.csv")
 
