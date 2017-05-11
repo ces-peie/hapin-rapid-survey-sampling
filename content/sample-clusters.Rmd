@@ -8,7 +8,7 @@ output:
 ---
 
 
-```{r setup}
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
 # Load used packages
 library(package = "raster")
 library(package = "rgeos")
