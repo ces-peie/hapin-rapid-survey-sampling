@@ -1,0 +1,22 @@
+# Rstudio project
+*.Rproj
+.Rproj.user
+.Rhistory
+
+# Data
+data/
+
+# Output files
+output/
+
+# Qgis files
+*.qgs*
+
+# Document files
+*.pdf
+*.png
+*.tif*
+*.jpg
+*.doc*
+*.xls*
+
