@@ -50,7 +50,7 @@ adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
 ```{r get-limits-data}
 # Set included municipalities
-included <- c("Jalapa", "San Pedro Pinula")
+included <- c("Jalapa", "San Pedro Pinula", "San Carlos Alzatate")
 
 # Read in limits
 municipalities <- readShapePoly(
@@ -117,7 +117,7 @@ plot(study_munis, col = "white", add = TRUE)
 plot(excluded, col = "grey40", add = TRUE)
 title("Fig. 3: Excluded areas")
 text(
-  coordinates(study_munis) - matrix(c(0, -0.02, 0, 0.05), ncol = 2),
+  coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0.05, 0), ncol = 2),
   labels = gsub(
     pattern = " ",
     replacement = "\n",
