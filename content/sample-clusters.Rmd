@@ -107,8 +107,17 @@ excluded_communities <- "./data/jalapa-excluded-communities.csv" %>%
     proj4string = CRS("+init=epsg:4326")
   )
 
-# Get the convex hull containing the excluded comunities
-excluded_hull <- gConvexHull(excluded_communities)
+# Get Jalapa "metro" area to exclude it
+jalapa_metro <- readShapePoly(
+  "./data/shapefiles/community_outlines/Poligonos lugares poblados.shp"
+) %>%
+  subset(NAME == "JALAPA")
+
+# Get the convex hull containing the excluded comunities and Jalapa "metro"
+excluded_hull <- excluded_communities %>%
+  gConvexHull() %>%
+  # Join with Jalapa "metro" area
+  gUnion(jalapa_metro)
 
 # Subtract excluded areas
 study_area <- gDifference(study_munis, excluded_hull)
