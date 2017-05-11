@@ -1,7 +1,10 @@
 ---
 title: Sampling for HAPIN first stage - clusters
-author: Oscar de León
-date: 2017-05-11
+author: Oscar de León - `r Sys.Date()`
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
 output:
   pdf_document: default
   html_document: default
@@ -230,16 +233,26 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 
 
 
-```{r clusters-density}
+\newpage
+\blandscape
+
+```{r clusters-density, dpi=600, out.width="1\\linewidth", fig.width=9, fig.height=6.5}
+dpar <- par()
+par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
-title("Fig. 5: Aggregated population density\nand selected clusters")
+title("Fig. 5: Aggregated population density and selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
+lines(excluded, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
-text(coordinates(cluster_polygons), labels = cluster_polygons$correlative, cex = 0.5)
+text(
+  coordinates(cluster_polygons),
+  labels = cluster_polygons$correlative,
+  cex = 0.4, col = "red"
+)
+par(dpar)
 ```
 
-
-
+\elandscape
 
 
 
