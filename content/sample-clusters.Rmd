@@ -251,36 +251,39 @@ write_csv(clusters, path = "output/clusters.csv")
 writeSpatialShape(cluster_polygons, fn = "output/clusters/clusters")
 
 # Function to get cluster tiles
-get_tile <- function(cluster, save_path = NULL, zoom = 16, format = "GTiff"){
-  # cell center
-  center <- cluster[c("lat", "long")] %>% unlist()
-  
-  # Get tile
-  cell <- RgoogleMaps::GetMap(
-    center = center[c("lat", "long")], zoom=16, maptype = "satellite"
+get_tile <- function(cluster, save_path, zoom = 16){
+  # file path
+  save_path <- file.path(
+    save_path,
+    stringr::str_pad(
+      string = cluster$correlative, width = 2, side = "left", pad = "0"
+    )
   )
   
-  # Convert to raster
-  bb <- cell$BBOX
-  cell <- stack(file.path(tempdir(), "mapTile.png"))
-  extent(cell) <- extent(bb$ll[,2],bb$ur[,2],bb$ll[,1],bb$ur[,1])
-  
-  if(!is.null(save_path)){
-    # file path
-    save_path <- file.path(
-      save_path,
-      stringr::str_pad(
-        string = cluster$correlative, width = 2, side = "left", pad = "0"
-      )
+  if(!file.exists(paste0(save_path, ".tif"))){
+    # cell center
+    center <- cluster[c("lat", "long")] %>% unlist()
+    
+    # Get tile
+    cell <- RgoogleMaps::GetMap(
+      center = center[c("lat", "long")], zoom=16, maptype = "satellite"
     )
+    
+    # Convert to raster
+    bb <- cell$BBOX
+    cell <- stack(file.path(tempdir(), "mapTile.png"))
+    extent(cell) <- extent(bb$ll[,2],bb$ur[,2],bb$ll[,1],bb$ur[,1])
+    
+    # Save as GTiff
     writeRaster(
-      x = cell, filename = save_path, format = format, overwrite = TRUE
+      x = cell, filename = save_path, format = "GTiff", overwrite = TRUE
     )
+    # Copy the downloaded png
     file.copy(file.path(tempdir(), "mapTile.png"), paste0(save_path, ".png"))
+    
   }
   
-  cell <- stack(paste0(save_path, ".png"))
-  extent(cell) <- extent(bb$ll[,2],bb$ur[,2],bb$ll[,1],bb$ur[,1])
+  cell <- raster(paste0(save_path, ".tif"))
   
   return(cell)
 }
