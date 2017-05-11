@@ -93,12 +93,25 @@ study_munis <- jalapa %>%
   subset(MUNICIPIO %in% included)
 
 # Read exluded areas
-excluded <- readShapePoly(
-  fn = "data/shapefiles/exclusions/exclusions.shp"
-)
+excluded_communities <- "./data/jalapa-excluded-communities.csv" %>%
+  # Get the list
+  read_csv() %>%
+  filter(
+    !NUEVO_COD %in% c(2101222, 2101047)
+  ) %>%
+  # Convert to spatial object
+  SpatialPointsDataFrame(
+    coords = select(., long = X, lat = Y),
+    # coords.nrs = 1:2,
+    data = .,
+    proj4string = CRS("+init=epsg:4326")
+  )
+
+# Get the convex hull containing the excluded comunities
+excluded_hull <- gConvexHull(excluded_communities)
 
 # Subtract excluded areas
-study_area <- gDifference(study_munis, excluded)
+study_area <- gDifference(study_munis, excluded_hull)
 ```
 
 
@@ -141,7 +154,7 @@ text(
 # Excluded areas
 plot(jalapa, col = "grey90")
 plot(study_munis, col = "white", add = TRUE)
-plot(excluded, col = "grey40", add = TRUE)
+plot(excluded_hull, col = "grey40", add = TRUE)
 title("Fig. 3: Excluded areas")
 text(
   coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0.05, 0), ncol = 2),
@@ -211,7 +224,7 @@ par(mar = c(2, 2, 3, 1))
 plot(study_density)
 title("Fig. 4: Raw population density\nand study areas")
 plot(jalapa, add = TRUE, asp = 1)
-plot(excluded, add = TRUE, col = "grey20", asp = 1)
+plot(excluded_hull, add = TRUE, col = "grey20", asp = 1)
 lines(study_munis, col = "red")
 par(dpar)
 
@@ -342,7 +355,7 @@ par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
 title("Fig. 6: Aggregated population density and selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
-lines(excluded, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
+lines(excluded_hull, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
 text(
   coordinates(cluster_polygons),
