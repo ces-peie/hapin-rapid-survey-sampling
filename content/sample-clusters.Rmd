@@ -270,8 +270,8 @@ hist(
 
 # Sampling clusters
 
-We want to sample `r cluster_size` households within each cluster, which considering
-a `r signif(response*100, 3)`% of response need to have *at least*
+We want to sample `r cluster_size` households within each cluster, and considering
+a `r signif(response*100, 3)`% of response we need to have *at least*
 `r ceiling(cluster_size / response)` households,
 amounting to `r min_cluster_pop` individuals per cluster.
 To define the geographical extent for the clusters I took into account that
@@ -285,7 +285,7 @@ divided by the median density.
 The resulting cluster population requires to aggregate the population density data
 to square "cluster sized" cells with `sqrt(adjusted population)` ~ `r cluster_side`
 raw cells per side, assuming the median density per cell.
-This aggregation results in cells of roughly `r signif(res(cluster_cells)[1], 1)`
+This aggregation results in cells with a resolution of roughly `r signif(res(cluster_cells)[1], 1)`
 degrees, or `r cluster_side*100`m,
 with at most `r percent_small`% containing less than `r cluster_size / response` households.
 I used the total population of each cluster-sized cell as weights[^2] to
