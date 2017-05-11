@@ -24,9 +24,28 @@ knitr::opts_knit$set(root.dir = "..")
 ```
 
 
+We have considered a two stage sampling design to select households for the rapid assessment.
+In this document I describe the first sampling stage,
+which involves defining and randomly selecting clusters
+so that every household in the study area
+has the same probability of being included in the assessment.
+
+
 
 
 # Define parameters
+
+To define and randomly select clusters within the study area
+it is necessaty to know the number and location of households.
+Since this information is not available, I used the population density provided by WorldPop.
+These data are delivered as a spatial raster with a resolution of 8.33x10^-4^ degrees
+(approximately 100x100m at the equator)
+containing the predicted number of inhabitants per cell.
+To inform the cluster selection with these data we have to make an assumption
+about the number of inhabitants per household (*i.e.* the household size),
+and we also need to account for failure to include households (percent response)
+and for selecting unsuitable clusters (*e.g.* clusters without enough households).
+I included below the values used for these assumptions.
 
 
 ```{r sampling-parameters, echo=TRUE}
@@ -48,7 +67,12 @@ adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
 
 
-# Political limits
+# Administrative limits
+
+The rapid assessment will be performed in some municipalities of the Jalapa department.
+Below I show the administrative limits of Jalapa (**Fig. 1**),
+the selected municipalities (**Fig. 2**),
+and some areas that are to be excluded (**Fig. 3**).
 
 
 ```{r get-limits-data}
@@ -139,6 +163,7 @@ text(
 
 # Population density
 
+
 ```{r get-density-data}
 
 # Read in rasters
@@ -168,6 +193,17 @@ percent_small <- ceiling(cluster_ecdf(cluster_size / response)*100)
 ```
 
 
+In **Fig. 4** I show the raw population density from the WorldPop model,
+masked by the excluded areas (in dark grey).
+The highest population densities
+(~`r round(max(study_density[], na.rm = TRUE))` persons per household, pph)
+are found close to (and inside) the excluded Jalapa "metropolitan" area.
+The population density is skewed to lower values
+(median ~ `r round(median_density)`, **Fig. 5**),
+so we have to carefully define the clusters geographical extent to improve
+the probability of selecting clusters with an addequate number of households.
+
+
 ```{r pop-density, results='hold', out.width="0.5\\linewidth"}
 # Raw density
 dpar <- par()
@@ -191,6 +227,36 @@ hist(
 
 
 # Sampling clusters
+
+We want to sample `r cluster_size` households within each cluster, which considering
+a `r signif(response*100, 3)`% of response need to have *at least*
+`r ceiling(cluster_size / response)` households,
+amounting to `r min_cluster_pop` individuals per cluster.
+To define the geographical extent for the clusters I took into account that
+50% of the ~100x100m WorldPop cells have a value smaller than `r round(median_density)`,
+and adjusted the cluster population[^1] to ~`r ceiling(adj_cluster_pop)` to ensure
+that most clusters have at least the number of households we want to sample.
+
+[^1]: Adjusted the needed cluster population to twice the original size,
+divided by the median density.
+
+The resulting cluster population requires to aggregate the population density data
+to square "cluster sized" cells with `sqrt(adjusted population)` ~ `r cluster_side`
+raw cells per side, assuming the median density per cell.
+This aggregation results in cells of roughly `r signif(res(cluster_cells)[1], 1)`
+degrees, or `r cluster_side*100`m,
+with at most `r percent_small`% containing less than `r cluster_size / response` households.
+I used the total population of each cluster-sized cell as weights[^2] to
+randomly select `r adj_clusters` clusters with probability proportional to size.
+Since the next sampling stage involves randomly picking the same number of 
+households within each cluster,
+this would ideally allow for every household in the study area to have the
+same probability of being selected.
+
+
+[^2]: Using the value of each cell relative to the maximum value among all cells
+as the probability to sample it.
+
 
 
 ```{r sample-clusters}
@@ -245,6 +311,26 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 )
 ```
 
+
+A very common approach to spatial sampling uses *geographically balanced sampling*,
+which ensures equally-sized areas are represented in the sampling
+(usually through some sort of tesselation).
+This is very important when there is a strong spatial effect on the dependent
+variables or covariates,
+but less so when no spatial associations are expected.
+The method used to select the clusters in this document *does not* provide a
+spatially balanced sample,
+but this should not have a big impact on representativity since most of the study
+area is so sparesly populated[^3].
+In **Fig. 6** I show the aggregated population density and the randomly
+selected clusters.
+
+
+[^3]: A spatially balanced sample could prove more useful for the second sampling
+stage, given that factors at a lower geographical scale
+(e.g. point sources of pollution such as factories, sites with regular crop burning,
+or areas with heavier motor vehicle trafic) could have a big effect on individual
+households.
 
 
 \newpage
