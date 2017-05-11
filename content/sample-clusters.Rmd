@@ -235,7 +235,7 @@ plot(cluster_cells)
 title("Fig. 5: Aggregated population density\nand selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
-points(centers, pch = ".")
+text(coordinates(cluster_polygons), labels = cluster_polygons$correlative, cex = 0.5)
 ```
 
 
