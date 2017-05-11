@@ -290,10 +290,8 @@ get_tile <- function(cluster, save_path, zoom = 16){
 
 # Get all cells
 clusters <- clusters %>%
-  # group_by(correlative, population, households, lat, long) %>%
-  rowwise() %>%
+  group_by(correlative, population, households, lat, long) %>%
   do(
-    data = .data,
     cell = get_tile(cluster = ., save_path = "output/cluster_satellite")
   )
 ```
