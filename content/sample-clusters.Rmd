@@ -374,6 +374,9 @@ stage, given that factors at a lower geographical scale
 or areas with heavier motor vehicle trafic) could have a big effect on individual
 households.
 
+In **Fig. 7** I include some tiles from satellite imagery provided by Google,
+representing selected clusters with low or high estimated number of households.
+
 
 \newpage
 \blandscape
@@ -450,7 +453,61 @@ clusters <- clusters %>%
     cell = get_tile(cluster = ., save_path = "output/cluster_satellite")
   ) %>%
   ungroup()
+```
+
+
+
+
+```{r some-clusters, fig.width=6.5, fig.height=9, out.width="1\\linewidth", cache.rebuild=TRUE, dpi=600}
+# Reproducible sampling
+set.seed(2017-05)
+
+# panels
+panels <- c(4, 3)
+
+# Select tiles
+tiles <- clusters %>%
+  group_by(households > 100) %>%
+  sample_n(ceiling(prod(panels) / 2)) %>%
+  ungroup() %>%
+  arrange(desc(households)) %>%
+  slice(1:prod(panels)) %>%
+  rownames_to_column(var = "order") %>%
+  mutate(
+    cluster = map(
+      correlative,
+      ~subset(cluster_polygons, cluster_polygons$correlative == .x)
+    )
   )
+
+# Set plot parameters
+dpar <- par()
+par(
+  mar = c(1, 1, 1, 1), # panel margins
+  mfrow = panels,     # fill 12 panels by row
+  oma = c(0, 3, 4, 3)  # outer margin for overall title
+)
+
+# Plot each tile
+tiles %>%
+  split(.$order) %>%
+  walk(
+    ~{
+      plotRGB(x = .x$cell[[1]])
+      lines(.x$cluster[[1]], lwd = 2, lty = 2)
+      mtext(
+        paste0(
+          "Cluster ", .x$correlative, ": ",
+          floor(.x$households), " households."
+        ),
+        side = 3, cex = 0.8, padj = 0.9
+      )
+    }
+  )
+
+# Add title
+title("Fig. 7: Tiles from selected clusters.", outer=TRUE)
+par(dpar)
 ```
 
 
