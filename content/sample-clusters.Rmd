@@ -438,7 +438,7 @@ get_tile <- function(cluster, save_path, zoom = 16){
     
   }
   
-  cell <- raster(paste0(save_path, ".tif"))
+  cell <- brick(paste0(save_path, ".tif"))
   
   return(cell)
 }
