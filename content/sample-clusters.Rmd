@@ -327,22 +327,24 @@ centers <- xyFromCell(cluster_cells, sampled_clusters)
 # Get polygons for each cluster
 cluster_cells[is.na(cluster_cells)] <- 0
 cluster_polygons <- rasterToPolygons(
-  x = cluster_cells,
-  function(x) seq_along(x) %in% sampled_clusters
-)
+  x = cluster_cells
+)[unique(sampled_clusters), ]
 
 
 # Collect data for sample clusters
 clusters <- cluster_polygons@data %>%
-  rownames_to_column(var = "correlative") %>%
+  rownames_to_column(var = "cell_id") %>%
   mutate(
-    correlative = order(sampled_clusters),
-    cell_id = sampled_clusters,
+    correlative = seq(1, n()),
+    times = as.vector(table(sampled_clusters)),
     households = layer / household_size
   ) %>%
-  select(correlative, cell_id, population = layer, households) %>%
-  bind_cols(as_tibble(centers[order(sampled_clusters),])) %>%
+  select(correlative, cell_id, times, population = layer, households) %>%
+  bind_cols(as_tibble(unique(centers))) %>%
   rename(lat = y, long = x)
+
+# Force rownames on cluster data
+rownames(clusters) <- clusters$cell_id
 
 
 # Edit clusters data
