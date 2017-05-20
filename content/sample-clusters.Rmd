@@ -289,7 +289,7 @@ This aggregation results in cells with a resolution of roughly `r signif(res(clu
 degrees, or `r cluster_side*100`m,
 with at most `r percent_small`% containing less than `r cluster_size / response` households.
 I used the total population of each cluster-sized cell as weights[^2] to
-randomly select `r adj_clusters` clusters with probability proportional to size.
+randomly select `r adj_clusters` clusters with probability proportional to size, with replacement.
 Since the next sampling stage involves randomly picking the same number of 
 households within each cluster,
 this would ideally allow for every household in the study area to have the
