@@ -59,7 +59,7 @@ n_clusters <- ceiling(sample_size / cluster_size)  # enough clusters for ss
 
 # Inefficiency
 response <- 2/3                                # proportion contacted included
-suitable <- 4/5                                # proportion of suitable clusters
+suitable <- 2/5                                # proportion of suitable clusters
 adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
 ```
