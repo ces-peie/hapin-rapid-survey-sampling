@@ -317,7 +317,7 @@ weights <- weights / max(weights[])    # scale to probabilities
 sampled_clusters <- sample(
   x = seq_len(length.out = length(weights[])),
   size = adj_clusters,
-  replace = FALSE,
+  replace = TRUE,
   prob = weights[]
 )
 
