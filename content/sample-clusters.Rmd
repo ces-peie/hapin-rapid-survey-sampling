@@ -77,7 +77,9 @@ and some areas that are to be excluded (**Fig. 3**).
 
 ```{r get-limits-data}
 # Set included municipalities
-included <- c("Jalapa", "San Pedro Pinula", "San Carlos Alzatate")
+included <- c(
+  "Jalapa", "San Pedro Pinula", "San Carlos Alzatate", "San Luis Jilotepeque"
+)
 
 # Read in limits
 municipalities <- readShapePoly(
