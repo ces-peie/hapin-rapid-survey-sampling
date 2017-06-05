@@ -59,7 +59,7 @@ sampled_roofs <- all_roofs %>%
   # Add house id
   map(
     cbind,
-    house_id = 1:roofs_by_cluster
+    name = as.character(1:roofs_by_cluster)
   ) %>%
   # Bind all
   do.call(rbind, .)
