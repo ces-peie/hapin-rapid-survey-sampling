@@ -188,7 +188,7 @@ plot(study_munis, col = "white", add = TRUE)
 plot(excluded_hull, col = "grey40", add = TRUE)
 title("Fig. 3: Excluded areas")
 text(
-  coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0.05, 0), ncol = 2),
+  coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0, 0.05, 0, 0), ncol = 2),
   labels = gsub(
     pattern = " ",
     replacement = "\n",
