@@ -75,5 +75,22 @@ sampled_roofs <- all_roofs %>%
 write_sf(sampled_roofs, dsn = "data/roofs/sampled/sampled.shp")
 write_csv(sampled_roofs, path = "data/roofs/sampled/casas-elegidas.csv")
 
+# Export as individual GPX files for use in the gps receivers
+sampled_roofs %>%
+  mutate(
+    cluster = stringr::str_pad(cluster, width = 3, side = "left", pad = "0"),
+    name = stringr::str_pad(name, width = 2, side = "left", pad = "0"),
+    name = paste(cluster, name, sep = "-")
+  ) %>%
+  split(sampled_roofs$cluster) %>%
+  walk(
+    ~write_sf(
+      obj = select(.x, name, geometry),
+      dsn = paste0("output/garmin/casas", first(.x$cluster), ".gpx"),
+      driver = "GPX",
+      delete_dsn = TRUE
+    )
+  )
+
 
 # End of script
