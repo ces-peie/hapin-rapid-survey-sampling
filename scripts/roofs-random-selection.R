@@ -19,7 +19,7 @@ library(package = "tidyverse")
 #------------------------------------------------------------------------------*
 
 # List available shapefiles
-shapefiles <- list.files("data/roofs/census/", full.names = TRUE, pattern = "shp")
+shapefiles <- list.files("data/roofs/census", full.names = TRUE, pattern = "shp")
 
 # Get all roofs
 all_roofs <- shapefiles %>%
