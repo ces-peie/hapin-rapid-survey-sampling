@@ -61,11 +61,19 @@ sampled_roofs <- all_roofs %>%
     cbind,
     name = as.character(1:roofs_by_cluster)
   ) %>%
+  # Add left/right pick
+  map(
+    ~cbind(
+      .x,
+      elegir = sample(c("izquierda", "derecha"), size = nrow(.x), replace = TRUE)
+    )
+  ) %>%
   # Bind all
   do.call(rbind, .)
 
 # Write sampled roofs
 write_sf(sampled_roofs, dsn = "data/roofs/sampled/sampled.shp")
+write_csv(sampled_roofs, path = "data/roofs/sampled/casas-elegidas.csv")
 
 
 # End of script
