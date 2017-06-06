@@ -466,6 +466,101 @@ clusters <- clusters %>%
 ```
 
 
+# Cluster evaluation
+
+```{r cluster-suitability, include=FALSE}
+# Load visual assessment data
+jrivera <- read_csv("data/roofs/cluster_rapid_jrivera.csv")
+aramirez <- read_excel("data/roofs/cluster_rapid_aramirez.xlsx")
+
+
+# Standardize input
+st_jrivera <- jrivera %>%
+  select(
+    correlative, cell_id,
+    jr_type = tipo, jr_assesment = suficientes, jr_comment = comentario
+  ) %>%
+  mutate(
+    jr_type = case_when(
+      grepl("Rural", jr_type, ignore.case = TRUE) ~ "rural",
+      grepl("Urb", jr_type, ignore.case = TRUE) ~ "urban",
+      is.na(jr_type) ~ NA_character_,
+      TRUE ~ "error"
+    )
+  )
+
+st_aramirez <- aramirez %>%
+  select(
+    correlative, cell_id,
+    ar_type = tipo, ar_assesment = suficientes, ar_comment = comentario
+  ) %>%
+  mutate(
+    ar_type = case_when(
+      grepl("R", ar_type, ignore.case = TRUE) ~ "rural",
+      grepl("U", ar_type, ignore.case = TRUE) ~ "urban",
+      is.na(ar_type) ~ NA_character_,
+      TRUE ~ "error"
+    )
+  )
+
+
+
+
+#------------------------------------------------------------------------------*
+# Review assessment
+#------------------------------------------------------------------------------*
+
+# Join assessments
+assessment <- st_aramirez %>%
+  left_join(st_jrivera)
+
+
+# Compare assesment
+
+# Evaluated by jrivera
+assessment %>% filter(jr_type %in% c("urban", "rural")) %>% nrow()
+
+# Evaluated by aramirez
+assessment %>% filter(ar_type %in% c("urban", "rural")) %>% nrow()
+
+# Concordance among evaluated
+assessment %>% filter(!is.na(jr_type)) %>% count(ar_type, jr_type)
+
+# Review discordances in cluster type (rural vs urban)
+assessment %>%
+  filter(
+    !is.na(jr_type),
+    jr_type != ar_type
+  )
+
+# Review discordances in cluster suitability
+assessment %>%
+  filter(
+    !is.na(jr_type),
+    jr_assesment != ar_assesment,
+    # Remove cluster 60 (cell id 1127)
+    correlative != 60
+  ) %>%
+  select(-ar_comment, -jr_comment)
+
+
+# Get list of clusters evaluated as suitable
+suitable <- assessment %>%
+  filter(
+    ar_assesment == 1,
+    correlative != 57
+  )
+
+```
+
+
+All randomly selected clusters were evaluated by two independent reviewers to
+assess if they were suitable for inclusion in the scoping survey.
+This was done by looking at recent satellite imagery for each cluster
+and estimating the number of structures found in each one by counting the visible roofs.
+Clusters were deemed suitable if at least 20 roofs were observed by the reviewer.
+
+
 
 
 ```{r some-clusters, fig.width=6.5, fig.height=9, out.width="1\\linewidth", cache.rebuild=TRUE, dpi=600}
