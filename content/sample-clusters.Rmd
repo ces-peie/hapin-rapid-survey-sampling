@@ -690,6 +690,47 @@ nearby_services %>%
 ```
 
 
+
+
+\newpage
+\blandscape
+
+```{r clusters-services, dpi=600, out.width="1\\linewidth", fig.width=10, fig.height=7.5}
+dpar <- par()
+par(mar = c(2, 2, 3, 1))
+# Base map
+plot(jalapa, asp = 1)
+title("Fig. 7: Selected clusters and nearby health service facilities")
+lines(excluded_hull, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
+# Clusters and lines to services
+lines(connect_services, col = "blue")
+plot(selected_clusters, add = TRUE, asp = 1, col = "white")
+# Label clusters
+text(
+  coordinates(selected_clusters),
+  labels = selected_clusters$correlative,
+  cex = 0.4, col = "red"
+)
+# Unique services
+unique_services <- nearby_services %>%
+  select(servicio, serv_long, serv_lat) %>%
+  unique()
+# Label services
+raster::text(
+  as.matrix(select(unique_services, serv_long, serv_lat)),
+  labels = unique_services$servicio,
+  cex = 0.4, col = "blue",
+  halo = TRUE
+)
+
+par(dpar)
+```
+
+\elandscape
+
+
+
+
 ```{r some-clusters, fig.width=6.5, fig.height=9, out.width="1\\linewidth", cache.rebuild=TRUE, dpi=600}
 # Reproducible sampling
 set.seed(2017-05)
@@ -738,7 +779,7 @@ tiles %>%
   )
 
 # Add title
-title("Fig. 7: Tiles from selected clusters.", outer=TRUE)
+title("Fig. 8: Tiles from selected clusters.", outer=TRUE)
 par(dpar)
 ```
 
