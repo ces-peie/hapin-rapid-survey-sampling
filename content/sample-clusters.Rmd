@@ -13,6 +13,7 @@ output:
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
 # Load used packages
+library(package = "readxl")
 library(package = "raster")
 library(package = "rgeos")
 library(package = "maptools")
@@ -458,7 +459,7 @@ get_tile <- function(cluster, save_path, zoom = 16){
 
 # Get all cells
 clusters <- clusters %>%
-  group_by(correlative, population, households, lat, long) %>%
+  group_by(correlative, times, population, households, lat, long) %>%
   do(
     cell = get_tile(cluster = ., save_path = "output/cluster_satellite")
   ) %>%
@@ -559,6 +560,29 @@ assess if they were suitable for inclusion in the scoping survey.
 This was done by looking at recent satellite imagery for each cluster
 and estimating the number of structures found in each one by counting the visible roofs.
 Clusters were deemed suitable if at least 20 roofs were observed by the reviewer.
+
+
+```{r suitable-clusters}
+clusters %>%
+  filter(
+    correlative %in% suitable$correlative
+  ) %>%
+  mutate_if(
+    is.numeric,
+    funs(round(., 2))
+  ) %>%
+  arrange(
+    desc(times), correlative
+  ) %>%
+  select(
+    Cluster = correlative,
+    "Times sampled" = times,
+    "Modeled population" = population,
+    "Modeled households" = households,
+    Latitude = lat, Longitude = long
+  ) %>%
+  knitr::kable()
+```
 
 
 
