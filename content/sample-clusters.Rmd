@@ -563,10 +563,18 @@ Clusters were deemed suitable if at least 20 roofs were observed by the reviewer
 
 
 ```{r suitable-clusters}
-clusters %>%
+suitable_clusters <- clusters %>%
   filter(
     correlative %in% suitable$correlative
   ) %>%
+  select(-cell)
+
+selected_clusters <- cluster_polygons %>%
+  subset(
+    cluster_polygons$correlative %in% suitable_clusters$correlative
+  )
+
+suitable_clusters %>%
   mutate_if(
     is.numeric,
     funs(round(., 2))
@@ -585,6 +593,101 @@ clusters %>%
 ```
 
 
+
+
+# Health services close to selected clusters
+
+```{r nearby-services}
+# Read services recorded for Jalapa
+services <- sf::read_sf(
+  dsn = "data/shapefiles/services/health-services.shp",
+  crs = "+init=epsg:4326"
+)
+
+# Get data for relevant health related services
+health_services <- services %>%
+  mutate(
+    servicio = tolower(servicio),
+    tipo_serv = tolower(tipo_serv),
+    service_type = recode_factor(
+      tolower(tipo_serv),
+      "puesto de salud" = "post",
+      "centro convergencia" = "convergence",
+      "centro de salud" = "center",
+      .default = "other",
+      .ordered = TRUE
+    )
+  ) %>%
+  select(
+    codgeo, geometry, servicio, tipo_serv, service_type
+  ) %>%
+  filter(
+    service_type != "other"
+  ) %>%
+  # Add coordinates as regular variables
+  bind_cols(
+    sf::st_coordinates(.$geometry) %>%
+      as_tibble() %>%
+      set_names(c("serv_long", "serv_lat"))
+  )
+
+
+# Join services to clusters
+nearby_services <- suitable_clusters %>%
+  select(correlative, lat, long) %>%
+  mutate(join = TRUE) %>%
+  left_join(mutate(health_services, join = TRUE)) %>%
+  mutate(
+    # Distance in meters between cluster centroids and each health service facility
+    distance = pointDistance(
+      p1 = matrix(c(long, lat), ncol = 2),
+      p2 = matrix(c(serv_long, serv_lat), ncol = 2),
+      lonlat = TRUE
+    )
+  ) %>%
+  # Keep the 5 facilites closest to each cluster
+  arrange(correlative, distance) %>%
+  group_by(correlative) %>%
+  slice(1) %>%
+  ungroup()
+
+# Function to create lines shape from data frame
+df_to_line <- function(df){
+  lines <- df %>%
+    select(long, lat) %>%
+    as.matrix() %>%
+    Line %>%
+    Lines(ID = first(df$cluster))
+}
+
+# Lines connecting services to clusters
+connect_services <- nearby_services %>%
+  select(
+    cluster = correlative, servicio, clust_lat = lat, clust_long = long,
+    serv_lat, serv_long
+  ) %>%
+  gather(key = type, value = value, -cluster, -servicio) %>%
+  separate(type, into = c("type", "coord"), sep = "_") %>%
+  spread(key = coord, value = value) %>%
+  split(.$cluster) %>%
+  map(df_to_line) %>%
+  SpatialLines(proj4string = CRS("+init=epsg:4326"))
+
+# Save data for closest service by cluster
+nearby_services %>%
+  mutate(
+    distance = paste(round(distance/1000, 2), " km")
+  ) %>%
+  select(
+    cluster = correlative,
+    distance,
+    service_name = servicio,
+    service_code = codgeo,
+    service_type,
+    service_lat = serv_lat,
+    service_long = serv_long
+  )
+```
 
 
 ```{r some-clusters, fig.width=6.5, fig.height=9, out.width="1\\linewidth", cache.rebuild=TRUE, dpi=600}
