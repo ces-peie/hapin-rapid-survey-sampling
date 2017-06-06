@@ -3,6 +3,12 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="">
     <customproperties/>
+    <layer-tree-group expanded="1" checked="Qt::Checked" name="Nearby PsOI">
+      <customproperties/>
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="buffer_communities20170605125920049" name="Communities 1km around clusters">
+        <customproperties/>
+      </layer-tree-layer>
+    </layer-tree-group>
     <layer-tree-layer expanded="1" checked="Qt::Checked" id="excluded_municipalities20170510163740211" name="Excluded municipalities">
       <customproperties/>
     </layer-tree-layer>
@@ -25,9 +31,6 @@
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" checked="Qt::Checked" id="buffered_communities20170605130005959" name="buffered_communities">
-      <customproperties/>
-    </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="buffer_communities20170605125920049" name="Communities 1km around clusters">
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" checked="Qt::Checked" id="exclusions20170510163022929" name="Areas excluded in Jalapa">
@@ -975,6 +978,13 @@
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
+    <legendgroup open="true" checked="Qt::Checked" name="Nearby PsOI">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Communities 1km around clusters" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="buffer_communities20170605125920049" visible="1"/>
+        </filegroup>
+      </legendlayer>
+    </legendgroup>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Excluded municipalities" showFeatureCount="0">
       <filegroup open="true" hidden="false">
         <legendlayerfile isInOverview="0" layerid="excluded_municipalities20170510163740211" visible="1"/>
@@ -1010,11 +1020,6 @@
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="buffered_communities" showFeatureCount="0">
       <filegroup open="true" hidden="false">
         <legendlayerfile isInOverview="0" layerid="buffered_communities20170605130005959" visible="1"/>
-      </filegroup>
-    </legendlayer>
-    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Communities 1km around clusters" showFeatureCount="0">
-      <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="buffer_communities20170605125920049" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Areas excluded in Jalapa" showFeatureCount="0">
