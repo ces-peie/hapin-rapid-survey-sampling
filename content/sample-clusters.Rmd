@@ -686,6 +686,9 @@ nearby_services %>%
     service_type,
     service_lat = serv_lat,
     service_long = serv_long
+  ) %>%
+  write_csv(
+    path = "output/nearby-health-services.csv"
   )
 ```
 
