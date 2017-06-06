@@ -606,6 +606,10 @@ services <- sf::read_sf(
 
 # Get data for relevant health related services
 health_services <- services %>%
+  # Remove services in excluded areas
+  sf::st_difference(
+    sf::st_as_sf(excluded_hull, crs = "+init=epsg:4326")
+  ) %>%
   mutate(
     servicio = tolower(servicio),
     tipo_serv = tolower(tipo_serv),
@@ -678,6 +682,7 @@ nearby_services %>%
   mutate(
     distance = paste(round(distance/1000, 2), " km")
   ) %>%
+  arrange(servicio) %>%
   select(
     cluster = correlative,
     distance,
