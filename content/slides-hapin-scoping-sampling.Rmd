@@ -2,7 +2,9 @@
 title: Sampling for HAPIN scoping phase
 author: Oscar de León 
 date: Prepared `r Sys.Date()`
-output: ioslides_presentation
+output:
+  ioslides_presentation:
+    css: ../lib/custom.css
 ---
 
 
