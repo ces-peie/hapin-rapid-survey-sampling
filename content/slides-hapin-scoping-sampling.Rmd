@@ -1,8 +1,8 @@
 ---
-title: Sampling for HAPIN first stage - clusters
-author: Oscar de León - `r Sys.Date()`
-output:
-  html_document: default
+title: Sampling for HAPIN scoping phase
+author: Oscar de León 
+date: Prepared `r Sys.Date()`
+output: ioslides_presentation
 ---
 
 
@@ -20,6 +20,11 @@ knitr::opts_knit$set(root.dir = "..")
 ```
 
 
+# Sampling design for HAPIN scoping survey
+
+
+## Purpose
+
 We have considered a two stage sampling design to select households for the rapid assessment.
 In this document I describe the first sampling stage,
 which involves defining and randomly selecting clusters
@@ -29,7 +34,7 @@ has the same probability of being included in the assessment.
 
 
 
-# Define parameters
+## Sampling parameters
 
 To define and randomly select clusters within the study area
 it is necessaty to know the number and location of households.
@@ -63,7 +68,7 @@ adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
 
 
-# Administrative limits
+## Administrative limits
 
 The rapid assessment will be performed in some municipalities of the Jalapa department.
 Below I show the administrative limits of Jalapa (**Fig. 1**),
@@ -201,7 +206,7 @@ text(
 
 
 
-# Population density
+## Population density
 
 
 ```{r get-density-data}
@@ -267,6 +272,8 @@ hist(
 
 
 # Sampling clusters
+
+## Constraints
 
 We want to sample `r cluster_size` households within each cluster, and considering
 a `r signif(response*100, 3)`% of response we need to have *at least*
@@ -378,6 +385,8 @@ In **Fig. 8** I include some tiles from satellite imagery provided by Google,
 representing selected clusters with low or high estimated number of households.
 
 
+## Sampled clusters
+
 ```{r clusters-density, dpi=600, fig.width=9, fig.height=6.5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
@@ -458,7 +467,7 @@ clusters <- clusters %>%
 ```
 
 
-# Cluster evaluation
+## Cluster evaluation
 
 ```{r cluster-suitability, include=FALSE}
 # Load visual assessment data
@@ -586,7 +595,7 @@ suitable_clusters %>%
 
 
 
-# Health services close to selected clusters
+## Health services close to selected clusters
 
 ```{r nearby-services}
 # Read services recorded for Jalapa
