@@ -25,16 +25,20 @@ dpi <- 92
 ```
 
 
-# Sampling design for HAPIN scoping survey
 
 
-## Purpose
+## Outline
 
-We have considered a two stage sampling design to select households for the rapid assessment.
-In this document I describe the first sampling stage,
-which involves defining and randomly selecting clusters
-so that every household in the study area
-has the same probability of being included in the assessment.
+### **Purpose**
+
+- Rationale for the scoping survey sample design
+- Details about the sampling frame for households
+
+
+### **Two stage sampling design**
+
+- Clusters selected proportional to size
+- Households selected randomly within clusters
 
 
 
@@ -179,7 +183,31 @@ par(dpar)
 
 
 
-## Population density
+# Sampling stage 1 - clusters
+
+## Overview
+
+- Defining clusters based on available information
+- Randomly selecting clusters so that every household in the study area
+has the same probability of being included in the assessment
+- Evaluating sampled clusters for suitability
+- Finding nearby health services to evaluate
+
+
+
+
+## Unavailable information
+
+- Population estimates
+    + Last census in 2002
+- Recent cartography
+    + Communities shapefiles used for last census
+    + Detailed cartography for the communities
+
+
+
+
+## Population density models
 
 
 ```{r get-density-data}
@@ -244,7 +272,6 @@ hist(
 
 
 
-# Sampling clusters
 
 ## Constraints
 
@@ -568,7 +595,7 @@ suitable_clusters %>%
 
 
 
-## Health services close to selected clusters
+## Nearby health services
 
 ```{r nearby-services}
 # Read services recorded for Jalapa
@@ -704,5 +731,32 @@ raster::text(
 
 par(dpar)
 ```
+
+
+
+
+# Sampling stage 2 - households
+
+## Overview
+
+- Describe manual rooftop extraction
+- Describe rooftop sampling
+- Describe methodology for finding households in the field
+
+
+
+
+## Rooftop extraction
+
+
+
+
+## Rooftop sampling
+
+
+
+
+## Finding households
+
 
 
