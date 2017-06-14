@@ -1,12 +1,7 @@
 ---
 title: Sampling for HAPIN first stage - clusters
 author: Oscar de León - `r Sys.Date()`
-header-includes:
-- \usepackage{pdflscape}
-- \newcommand{\blandscape}{\begin{landscape}}
-- \newcommand{\elandscape}{\end{landscape}}
 output:
-  pdf_document: default
   html_document: default
 ---
 
@@ -147,7 +142,7 @@ study_area <- gDifference(study_munis, excluded_hull)
 ```
 
 
-```{r geo-limits, results='hold', out.width="0.33\\linewidth"}
+```{r geo-limits, results='hold'}
 # Base political limits
 plot(jalapa)
 title("Fig. 1: Jalapa municipalities")
@@ -249,7 +244,7 @@ so we have to carefully define the clusters geographical extent to improve
 the probability of selecting clusters with an addequate number of households.
 
 
-```{r pop-density, results='hold', out.width="0.5\\linewidth"}
+```{r pop-density, results='hold'}
 # Raw density
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
@@ -383,10 +378,7 @@ In **Fig. 8** I include some tiles from satellite imagery provided by Google,
 representing selected clusters with low or high estimated number of households.
 
 
-\newpage
-\blandscape
-
-```{r clusters-density, dpi=600, out.width="1\\linewidth", fig.width=9, fig.height=6.5}
+```{r clusters-density, dpi=600, fig.width=9, fig.height=6.5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
@@ -402,7 +394,6 @@ text(
 par(dpar)
 ```
 
-\elandscape
 
 
 
@@ -700,10 +691,8 @@ nearby_services %>%
 
 
 
-\newpage
-\blandscape
 
-```{r clusters-services, dpi=600, out.width="1\\linewidth", fig.width=10, fig.height=7}
+```{r clusters-services, dpi=600, fig.width=10, fig.height=7}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 # Base map
@@ -734,12 +723,11 @@ raster::text(
 par(dpar)
 ```
 
-\elandscape
 
 
 
 
-```{r some-clusters, fig.width=6.5, fig.height=9, out.width="1\\linewidth", cache.rebuild=TRUE, dpi=600}
+```{r some-clusters, fig.width=6.5, fig.height=9, cache.rebuild=TRUE, dpi=600}
 # Reproducible sampling
 set.seed(2017-05)
 
