@@ -379,7 +379,7 @@ stage, given that factors at a lower geographical scale
 or areas with heavier motor vehicle trafic) could have a big effect on individual
 households.
 
-In **Fig. 7** I include some tiles from satellite imagery provided by Google,
+In **Fig. 8** I include some tiles from satellite imagery provided by Google,
 representing selected clusters with low or high estimated number of households.
 
 
@@ -703,7 +703,7 @@ nearby_services %>%
 \newpage
 \blandscape
 
-```{r clusters-services, dpi=600, out.width="1\\linewidth", fig.width=10, fig.height=7.5}
+```{r clusters-services, dpi=600, out.width="1\\linewidth", fig.width=10, fig.height=7}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 # Base map
