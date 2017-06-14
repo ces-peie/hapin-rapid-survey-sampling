@@ -73,12 +73,7 @@ adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
 
 
-## Administrative limits
-
-The rapid assessment will be performed in some municipalities of the Jalapa department.
-Below I show the administrative limits of Jalapa (**Fig. 1**),
-the selected municipalities (**Fig. 2**),
-and some areas that are to be excluded (**Fig. 3**).
+## Study area
 
 
 ```{r get-limits-data}
@@ -152,51 +147,19 @@ study_area <- gDifference(study_munis, excluded_hull)
 ```
 
 
-```{r geo-limits, results='hold', dpi=dpi, fig.width=9, fig.height=3}
-# Arrange plots
-dpar <- par()
-par(mfrow = c(1, 3))
-
-# Base political limits
-plot(jalapa)
-title("Fig. 1: Jalapa municipalities")
-text(
-  coordinates(jalapa),
-  labels = gsub(
-    pattern = " ",
-    replacement = "\n",
-    x = iconv(
-      x = as.character(jalapa$MUNICIPIO),
-      from = "Latin1",
-      to = "ASCII//TRANSLIT"
-    )
-  ),
-  cex=0.6
-)
-
-# Selected municipalities
-plot(jalapa, col = "grey90")
-plot(study_munis, col = "white", add = TRUE)
-title("Fig. 2: Municipalities included in study")
-text(
-  coordinates(study_munis),
-  labels = gsub(
-    pattern = " ",
-    replacement = "\n",
-    x = iconv(
-      x = as.character(study_munis$MUNICIPIO),
-      from = "Latin1",
-      to = "ASCII//TRANSLIT"
-    )
-  ),
-  cex=0.6
-)
-
+```{r geo-limits, results='hold', dpi=dpi, fig.width=9, fig.height=5}
 # Excluded areas
+dpar <- par()
+par(mar = c(0, 0, 2, 0))
 plot(jalapa, col = "grey90")
 plot(study_munis, col = "white", add = TRUE)
 plot(excluded_hull, col = "grey40", add = TRUE)
-title("Fig. 3: Excluded areas")
+title(
+  main = paste0(
+    "Fig. 3: Study area\n",
+    "Light gray = not included, dark gray = excluded for being unsuitable."
+  )
+)
 text(
   coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0, 0.05, 0, 0), ncol = 2),
   labels = gsub(
@@ -210,8 +173,6 @@ text(
   ),
   cex=0.6
 )
-
-# Restore graphical parameters
 par(dpar)
 ```
 
