@@ -46,6 +46,7 @@ dpi <- 92
 
 ## Sampling parameters
 
+<div class="notes">
 To define and randomly select clusters within the study area
 it is necessaty to know the number and location of households.
 Since this information is not available, I used the population density provided by WorldPop.
@@ -57,6 +58,7 @@ about the number of inhabitants per household (*i.e.* the household size),
 and we also need to account for failure to include households (percent response)
 and for selecting unsuitable clusters (*e.g.* clusters without enough households).
 I included below the values used for these assumptions.
+</div>
 
 
 ```{r sampling-parameters, echo=TRUE}
@@ -195,9 +197,7 @@ has the same probability of being included in the assessment
 - Finding nearby health services to evaluate
 
 
-
-
-## Unavailable information
+### **Unavailable information**
 
 - Population estimates
     + Last census in 2002
@@ -240,6 +240,23 @@ percent_small <- ceiling(cluster_ecdf(cluster_size / response)*100)
 ```
 
 
+
+```{r pop-density, results='hold', dpi=dpi, fig.width=9, fig.height=3}
+# Raw density
+dpar <- par()
+par(mar = c(2, 2, 3, 1))
+plot(study_density)
+plot(jalapa, add = TRUE, asp = 1)
+plot(excluded_hull, add = TRUE, col = "grey20", asp = 1)
+lines(study_munis, col = "red")
+par(dpar)
+```
+
+
+### **Constraints**
+
+<div class="notes">
+
 In **Fig. 4** I show the raw population density from the WorldPop model,
 masked by the excluded areas (in dark grey).
 The highest population densities
@@ -247,46 +264,17 @@ The highest population densities
 are found close to (and inside) the excluded Jalapa "metropolitan" area.
 The population density is skewed to lower values
 (median ~ `r round(median_density)`, **Fig. 5**),
+
 so we have to carefully define the clusters geographical extent to improve
 the probability of selecting clusters with an addequate number of households.
-
-
-```{r pop-density, results='hold', dpi=dpi, fig.width=9, fig.height=6.5}
-# Raw density
-dpar <- par()
-par(mar = c(2, 2, 3, 1))
-plot(study_density)
-title("Fig. 4: Raw population density\nand study areas")
-plot(jalapa, add = TRUE, asp = 1)
-plot(excluded_hull, add = TRUE, col = "grey20", asp = 1)
-lines(study_munis, col = "red")
-par(dpar)
-
-# Raw density
-hist(
-  study_density, maxpixels = 1e6,
-  breaks = seq(0, ceiling(max(study_density[], na.rm = TRUE))),
-  xlab = "Count in cells", ylab = "n",
-  main = "Fig. 5: Distribution of population density values"
-)
-```
-
-
-
-
-## Constraints
-
 We want to sample `r cluster_size` households within each cluster, and considering
 a `r signif(response*100, 3)`% of response we need to have *at least*
 `r ceiling(cluster_size / response)` households,
 amounting to `r min_cluster_pop` individuals per cluster.
 To define the geographical extent for the clusters I took into account that
 50% of the ~100x100m WorldPop cells have a value smaller than `r round(median_density)`,
-and adjusted the cluster population[^1] to ~`r ceiling(adj_cluster_pop)` to ensure
+and adjusted the cluster population to ~`r ceiling(adj_cluster_pop)` to ensure
 that most clusters have at least the number of households we want to sample.
-
-[^1]: Adjusted the needed cluster population to twice the original size,
-divided by the median density.
 
 The resulting cluster population requires to aggregate the population density data
 to square "cluster sized" cells with `sqrt(adjusted population)` ~ `r cluster_side`
@@ -294,17 +282,37 @@ raw cells per side, assuming the median density per cell.
 This aggregation results in cells with a resolution of roughly `r signif(res(cluster_cells)[1], 1)`
 degrees, or `r cluster_side*100`m,
 with at most `r percent_small`% containing less than `r cluster_size / response` households.
-I used the total population of each cluster-sized cell as weights[^2] to
+I used the total population of each cluster-sized cell as weights to
 randomly select `r adj_clusters` clusters with probability proportional to size, with replacement.
 Since the next sampling stage involves randomly picking the same number of 
 households within each cluster,
 this would ideally allow for every household in the study area to have the
 same probability of being selected.
 
-
-[^2]: Using the value of each cell relative to the maximum value among all cells
+Using the value of each cell relative to the maximum value among all cells
 as the probability to sample it.
 
+A very common approach to spatial sampling uses *geographically balanced sampling*,
+which ensures equally-sized areas are represented in the sampling
+(usually through some sort of tesselation).
+This is very important when there is a strong spatial effect on the dependent
+variables or covariates,
+but less so when no spatial associations are expected.
+The method used to select the clusters in this document *does not* provide a
+spatially balanced sample,
+but this should not have a big impact on representativity since most of the study
+area is so sparesly populated.
+selected clusters.
+
+</div>
+
+- We want to enroll `r cluster_size` households within each cluster,
+so need to sample *at least* `r ceiling(cluster_size / response)`
+since some will likely not be houses
+- We use `r cluster_side` per side to get clusters with a modeled value of
+`r ceiling(adj_cluster_pop)` inhabitants
+- Clusters with a resolution of roughly `r signif(res(cluster_cells)[1], 1)`
+degrees, or `r cluster_side*100`m per side
 
 
 ```{r sample-clusters}
@@ -362,19 +370,6 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 ```
 
 
-A very common approach to spatial sampling uses *geographically balanced sampling*,
-which ensures equally-sized areas are represented in the sampling
-(usually through some sort of tesselation).
-This is very important when there is a strong spatial effect on the dependent
-variables or covariates,
-but less so when no spatial associations are expected.
-The method used to select the clusters in this document *does not* provide a
-spatially balanced sample,
-but this should not have a big impact on representativity since most of the study
-area is so sparesly populated[^3].
-In **Fig. 6** I show the aggregated population density and the randomly
-selected clusters.
-
 
 [^3]: A spatially balanced sample could prove more useful for the second sampling
 stage, given that factors at a lower geographical scale
@@ -382,17 +377,15 @@ stage, given that factors at a lower geographical scale
 or areas with heavier motor vehicle trafic) could have a big effect on individual
 households.
 
-In **Fig. 8** I include some tiles from satellite imagery provided by Google,
-representing selected clusters with low or high estimated number of households.
+
 
 
 ## Sampled clusters
 
-```{r clusters-density, dpi=dpi, fig.width=9, fig.height=6.5}
+```{r clusters-density, dpi=dpi, fig.width=9, fig.height=5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
-title("Fig. 6: Aggregated population density and selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
 lines(excluded_hull, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
@@ -556,12 +549,13 @@ suitable <- assessment %>%
 ```
 
 
-All randomly selected clusters were evaluated by two independent reviewers to
-assess if they were suitable for inclusion in the scoping survey.
-This was done by looking at recent satellite imagery for each cluster
-and estimating the number of structures found in each one by counting the visible roofs.
-Clusters were deemed suitable if at least 20 roofs were observed by the reviewer.
+- Selected `r adj_clusters` with probability proportional to size
+- All randomly selected clusters were evaluated by two independent reviewers
+    + Looking at recent satellite imagery for each cluster
+    + Estimating the number of visible roofs
+    + Clusters were deemed suitable if at least 20 roofs were observed by the reviewer
 
+### **Suitable clusters**
 
 ```{r suitable-clusters}
 suitable_clusters <- clusters %>%
@@ -702,12 +696,11 @@ nearby_services %>%
 
 
 
-```{r clusters-services, dpi=dpi, fig.width=9, fig.height=6.5}
+```{r clusters-services, dpi=dpi, fig.width=9, fig.height=5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 # Base map
 plot(jalapa, asp = 1)
-title("Fig. 7: Selected clusters and nearby health service facilities")
 lines(excluded_hull, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
 # Clusters and lines to services
 lines(connect_services, col = "blue")
@@ -747,17 +740,29 @@ par(dpar)
 
 
 
-## Rooftop extraction
+## Rooftop extraction and sampling
 
+Satellite images used to extract rooftops
 
-
-
-## Rooftop sampling
-
+<a href="cluster-maps/cluster_073.pdf" target="_blank">
+<img src="cluster-maps/cluster_073.png" width="800" height="500"></img>
+</a>
 
 
 
 ## Finding households
 
+### **Before leaving for the field**
+
+- Define cluster to visit
+- Load sampled rooftops coordinates to GPS receivers
+
+
+### **Once in the cluster**
+
+- Navigate to one of the rooftops coordinates
+- Find two closest structures
+- Get random selection from RedCap questionnaire
+(randomized during rooftop sampling and preloaded to server)
 
 
