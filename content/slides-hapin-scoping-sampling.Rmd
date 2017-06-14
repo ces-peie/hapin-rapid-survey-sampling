@@ -19,6 +19,9 @@ library(package = "tidyverse")
 # Configure knitr
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir = "..")
+
+# Configure presentation
+dpi <- 92
 ```
 
 
@@ -149,7 +152,11 @@ study_area <- gDifference(study_munis, excluded_hull)
 ```
 
 
-```{r geo-limits, results='hold'}
+```{r geo-limits, results='hold', dpi=dpi, fig.width=9, fig.height=3}
+# Arrange plots
+dpar <- par()
+par(mfrow = c(1, 3))
+
 # Base political limits
 plot(jalapa)
 title("Fig. 1: Jalapa municipalities")
@@ -203,6 +210,9 @@ text(
   ),
   cex=0.6
 )
+
+# Restore graphical parameters
+par(dpar)
 ```
 
 
@@ -251,7 +261,7 @@ so we have to carefully define the clusters geographical extent to improve
 the probability of selecting clusters with an addequate number of households.
 
 
-```{r pop-density, results='hold'}
+```{r pop-density, results='hold', dpi=dpi, fig.width=9, fig.height=6.5}
 # Raw density
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
@@ -389,7 +399,7 @@ representing selected clusters with low or high estimated number of households.
 
 ## Sampled clusters
 
-```{r clusters-density, dpi=600, fig.width=9, fig.height=6.5}
+```{r clusters-density, dpi=dpi, fig.width=9, fig.height=6.5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 plot(cluster_cells)
@@ -703,7 +713,7 @@ nearby_services %>%
 
 
 
-```{r clusters-services, dpi=600, fig.width=10, fig.height=7}
+```{r clusters-services, dpi=dpi, fig.width=9, fig.height=6.5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
 # Base map
