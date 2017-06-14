@@ -4,6 +4,7 @@ author: Oscar de León
 date: Prepared `r Sys.Date()`
 output:
   ioslides_presentation:
+    smaller: true
     css: ../lib/custom.css
 ---
 
