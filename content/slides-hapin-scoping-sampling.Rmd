@@ -1,5 +1,5 @@
 ---
-title: Sampling for HAPIN scoping - clusters
+title: Sampling for HAPIN first stage - clusters
 author: Oscar de León - `r Sys.Date()`
 header-includes:
 - \usepackage{pdflscape}
