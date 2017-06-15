@@ -821,6 +821,8 @@ all_roofs <- shapefiles %>%
   map(read_sf) %>%
   # Standardize field names
   map(set_names, nm = c("id", "cluster", "observacio", "geometry")) %>%
+  # Identify each point
+  map(mutate, rooftop = 1:n()) %>%
   # Standardize CRS
   map(st_set_crs, value = 4326) %>%
   # Record file name
@@ -830,6 +832,19 @@ all_roofs <- shapefiles %>%
   do.call(rbind, .)
 
 
+# Clean roof data
+clean_roofs <- all_roofs %>%
+  # Known fixes
+  mutate(
+    cluster = case_when(
+      cluster %in% c(74, 75) & grepl("jrivera", file) ~ 73,
+      TRUE ~ cluster
+    )
+  ) %>%
+  # Exclude duplicates
+  filter(
+    !duplicated(paste(cluster, rooftop))
+  )
 
 
 #------------------------------------------------------------------------------*
@@ -843,7 +858,7 @@ set.seed(2017-06-01)
 roofs_by_cluster <- 20
 
 # Sample roofs
-sampled_roofs <- all_roofs %>%
+sampled_roofs <- clean_roofs %>%
   # By cluster
   split(.$cluster) %>%
   # Sample a subset
