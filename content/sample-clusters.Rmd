@@ -859,6 +859,13 @@ clean_roofs <- all_roofs %>%
 # Sample roofs ----
 #------------------------------------------------------------------------------*
 
+# Clusters already sampled
+sampled_roofs_clusters <- "output/garmin" %>%
+  list.files(pattern = ".gpx") %>%
+  set_names(.) %>%
+  gsub("[^0-9]", "", .) %>%
+  as.numeric()
+
 # Reproducible sample
 set.seed(2017-06-01)
 
@@ -867,6 +874,8 @@ roofs_by_cluster <- 20
 
 # Sample roofs
 sampled_roofs <- clean_roofs %>%
+  # Ignore clusters already sampled
+  filter(!cluster %in% sampled_roofs_clusters) %>%
   # By cluster
   split(.$cluster) %>%
   # Sample a subset
@@ -893,28 +902,40 @@ sampled_roofs <- clean_roofs %>%
     )
   ) %>%
   # Bind all
+  map(select, id, cluster, observacio, name, elegir, geometry) %>%
   do.call(rbind, .)
 
-# Write sampled roofs
-write_sf(sampled_roofs, dsn = "data/roofs/sampled/sampled.shp")
-write_csv(sampled_roofs, path = "data/roofs/sampled/casas-elegidas.csv")
 
-# Export as individual GPX files for use in the gps receivers
-sampled_roofs %>%
-  mutate(
-    cluster = stringr::str_pad(cluster, width = 3, side = "left", pad = "0"),
-    name = stringr::str_pad(name, width = 2, side = "left", pad = "0"),
-    name = paste(cluster, name, sep = "-")
-  ) %>%
-  split(sampled_roofs$cluster) %>%
-  walk(
-    ~write_sf(
-      obj = select(.x, name, geometry),
-      dsn = paste0("output/garmin/casas", first(.x$cluster), ".gpx"),
-      driver = "GPX",
-      delete_dsn = TRUE
+# Save roofs if any were selected
+if(!is.null(sampled_roofs)){
+  # Read previously sampled points
+  previous_roofs <- read_sf("data/roofs/sampled/sampled.shp")
+  
+  # Bind all sampled roofs
+  all_sampled_roofs <- previous_roofs %>%
+    rbind(sampled_roofs)
+  
+  # Write sampled roofs
+  write_sf(all_sampled_roofs, dsn = "data/roofs/sampled/sampled.shp")
+  write_csv(all_sampled_roofs, path = "data/roofs/sampled/casas-elegidas.csv")
+  
+  # Export as individual GPX files for use in the gps receivers
+  sampled_roofs %>%
+    mutate(
+      cluster = stringr::str_pad(cluster, width = 3, side = "left", pad = "0"),
+      name = stringr::str_pad(name, width = 2, side = "left", pad = "0"),
+      name = paste(cluster, name, sep = "-")
+    ) %>%
+    split(sampled_roofs$cluster) %>%
+    walk(
+      ~write_sf(
+        obj = select(.x, name, geometry),
+        dsn = paste0("output/garmin/casas", first(.x$cluster), ".gpx"),
+        driver = "GPX",
+        delete_dsn = TRUE
+      )
     )
-  )
+}
 ```
 
 
