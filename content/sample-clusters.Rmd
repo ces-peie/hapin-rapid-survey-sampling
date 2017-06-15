@@ -855,6 +855,10 @@ clean_roofs <- all_roofs %>%
     !is.na(times)
   )
 
+# Remove excluded areas
+available_roofs <- clean_roofs %>%
+  st_difference(st_as_sf(excluded_hull, crs = "4326"))
+
 
 #------------------------------------------------------------------------------*
 # Sample roofs ----
@@ -874,7 +878,7 @@ set.seed(2017-06-01)
 roofs_by_cluster <- 20
 
 # Sample roofs
-sampled_roofs <- clean_roofs %>%
+sampled_roofs <- available_roofs %>%
   # Ignore clusters already sampled
   filter(!cluster %in% sampled_roofs_clusters) %>%
   # By cluster
