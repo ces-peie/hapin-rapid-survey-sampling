@@ -19,7 +19,10 @@ library(package = "tidyverse")
 #------------------------------------------------------------------------------*
 
 # List available shapefiles
-shapefiles <- list.files("data/roofs/census", full.names = TRUE, pattern = "shp")
+shapefiles <- "data/roofs/census" %>%
+  list.files(full.names = TRUE, pattern = "shp") %>%
+  set_names(basename(.))
+  
 
 # Get all roofs
 all_roofs <- shapefiles %>%
@@ -29,6 +32,9 @@ all_roofs <- shapefiles %>%
   map(set_names, nm = c("id", "cluster", "observacio", "geometry")) %>%
   # Standardize CRS
   map(st_set_crs, value = 4326) %>%
+  # Record file name
+  list(names(.)) %>%
+  pmap(~mutate(.x, file = .y)) %>%
   # Bind all
   do.call(rbind, .)
 
