@@ -18,6 +18,7 @@ library(package = "raster")
 library(package = "rgeos")
 library(package = "maptools")
 library(package = "sf")
+library(package = "git2r")
 library(package = "tidyverse")
 
 # Configure knitr
@@ -935,6 +936,13 @@ if(!is.null(sampled_roofs)){
         delete_dsn = TRUE
       )
     )
+  
+  # Record changes in git repo
+  repo <- repository(".")
+  add(repo, "data/roofs/sampled/casas-elegidas.csv")
+  add(repo, "data/roofs/sampled/sampled.*")
+  add(repo, "output/garmin/*.gpx")
+  commit(repo, message = "Update sampled rooftops")
 }
 ```
 
