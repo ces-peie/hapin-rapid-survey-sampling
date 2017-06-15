@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.659755840787300" minlon="-89.844877634304154" maxlat="14.665826231862765" maxlon="-89.840451087057048"/></metadata>                
+<wpt lat="14.6597558407873" lon="-89.841512089361046">
+  <name>143-01</name>
+</wpt>
+<wpt lat="14.660881635114746" lon="-89.844278681390563">
+  <name>143-02</name>
+</wpt>
+<wpt lat="14.66111893416099" lon="-89.844181708061711">
+  <name>143-03</name>
+</wpt>
+<wpt lat="14.661444530108339" lon="-89.844113256300147">
+  <name>143-04</name>
+</wpt>
+<wpt lat="14.661654235716444" lon="-89.844244455509781">
+  <name>143-05</name>
+</wpt>
+<wpt lat="14.6617921998228" lon="-89.844769252348371">
+  <name>143-06</name>
+</wpt>
+<wpt lat="14.662658612423771" lon="-89.843793814746235">
+  <name>143-07</name>
+</wpt>
+<wpt lat="14.662294388435889" lon="-89.844877634304154">
+  <name>143-08</name>
+</wpt>
+<wpt lat="14.662333018281499" lon="-89.844672279019491">
+  <name>143-09</name>
+</wpt>
+<wpt lat="14.66223920293033" lon="-89.844193116688615">
+  <name>143-10</name>
+</wpt>
+<wpt lat="14.662746909056871" lon="-89.844860521363756">
+  <name>143-11</name>
+</wpt>
+<wpt lat="14.662906946613621" lon="-89.844809182542605">
+  <name>143-12</name>
+</wpt>
+<wpt lat="14.663039391399716" lon="-89.844746435094507">
+  <name>143-13</name>
+</wpt>
+<wpt lat="14.663502947520222" lon="-89.84454678412331">
+  <name>143-14</name>
+</wpt>
+<wpt lat="14.662840724190529" lon="-89.843206270459575">
+  <name>143-15</name>
+</wpt>
+<wpt lat="14.662189535963442" lon="-89.842059703453529">
+  <name>143-16</name>
+</wpt>
+<wpt lat="14.660804374904664" lon="-89.840964475268677">
+  <name>143-17</name>
+</wpt>
+<wpt lat="14.663006280210714" lon="-89.842921054786416">
+  <name>143-18</name>
+</wpt>
+<wpt lat="14.661941200960019" lon="-89.840451087057048">
+  <name>143-19</name>
+</wpt>
+<wpt lat="14.665826231862765" lon="-89.84435854177903">
+  <name>143-20</name>
+</wpt>
+</gpx>

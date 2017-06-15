@@ -7,8 +7,13 @@
 data/
 
 # Output files
-output/
+output/*
 *.html
+*.zip
+*.tar.gz
+
+# Do not ignore selected rooftops
+!output/garmin
 
 # Qgis files
 *.qgs*

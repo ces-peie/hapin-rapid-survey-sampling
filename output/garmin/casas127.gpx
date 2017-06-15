@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.739215282443608" minlon="-89.812145004255356" maxlat="14.743214785386334" maxlon="-89.801734632185699"/></metadata>                
+<wpt lat="14.739215282443608" lon="-89.81068470000875">
+  <name>127-01</name>
+</wpt>
+<wpt lat="14.740417899327296" lon="-89.802339289412757">
+  <name>127-02</name>
+</wpt>
+<wpt lat="14.74082060900132" lon="-89.802236611770425">
+  <name>127-03</name>
+</wpt>
+<wpt lat="14.741322615908327" lon="-89.801734632185699">
+  <name>127-04</name>
+</wpt>
+<wpt lat="14.741681191561934" lon="-89.803263388193727">
+  <name>127-05</name>
+</wpt>
+<wpt lat="14.741151602696352" lon="-89.809252917329687">
+  <name>127-06</name>
+</wpt>
+<wpt lat="14.74144949659172" lon="-89.80936700359895">
+  <name>127-07</name>
+</wpt>
+<wpt lat="14.741107470232755" lon="-89.809629402018217">
+  <name>127-08</name>
+</wpt>
+<wpt lat="14.741052304640673" lon="-89.809806235735579">
+  <name>127-09</name>
+</wpt>
+<wpt lat="14.741890820132081" lon="-89.80988609612406">
+  <name>127-10</name>
+</wpt>
+<wpt lat="14.741002655595855" lon="-89.811682954864835">
+  <name>127-11</name>
+</wpt>
+<wpt lat="14.740958523102067" lon="-89.810593430993436">
+  <name>127-12</name>
+</wpt>
+<wpt lat="14.741653608840318" lon="-89.808003672681338">
+  <name>127-13</name>
+</wpt>
+<wpt lat="14.742128031165416" lon="-89.808260366787152">
+  <name>127-14</name>
+</wpt>
+<wpt lat="14.743214785386334" lon="-89.807273520558098">
+  <name>127-15</name>
+</wpt>
+<wpt lat="14.74190185320913" lon="-89.812145004255356">
+  <name>127-16</name>
+</wpt>
+<wpt lat="14.743082389223185" lon="-89.802225203143649">
+  <name>127-17</name>
+</wpt>
+<wpt lat="14.74315410382156" lon="-89.803885158361311">
+  <name>127-18</name>
+</wpt>
+<wpt lat="14.74319823587035" lon="-89.804073400705576">
+  <name>127-19</name>
+</wpt>
+<wpt lat="14.741416397290143" lon="-89.805579339459754">
+  <name>127-20</name>
+</wpt>
+</gpx>

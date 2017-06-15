@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.440842416344033" minlon="-90.057317556568975" maxlat="14.450807650275383" maxlon="-90.051077037640368"/></metadata>                
+<wpt lat="14.440842416344033" lon="-90.051077037640368">
+  <name>163-01</name>
+</wpt>
+<wpt lat="14.445968712180427" lon="-90.053689613206458">
+  <name>163-02</name>
+</wpt>
+<wpt lat="14.445173260225197" lon="-90.053113477546731">
+  <name>163-03</name>
+</wpt>
+<wpt lat="14.444587717384831" lon="-90.052069588183031">
+  <name>163-04</name>
+</wpt>
+<wpt lat="14.447134265115306" lon="-90.053512779489182">
+  <name>163-05</name>
+</wpt>
+<wpt lat="14.448067807847027" lon="-90.05396912456618">
+  <name>163-06</name>
+</wpt>
+<wpt lat="14.447487796551664" lon="-90.054368426508589">
+  <name>163-07</name>
+</wpt>
+<wpt lat="14.44855391138646" lon="-90.056872620118881">
+  <name>163-08</name>
+</wpt>
+<wpt lat="14.448714104365543" lon="-90.056501839743802">
+  <name>163-09</name>
+</wpt>
+<wpt lat="14.45043755256471" lon="-90.05287389638147">
+  <name>163-10</name>
+</wpt>
+<wpt lat="14.450807650275383" lon="-90.054083210835572">
+  <name>163-11</name>
+</wpt>
+<wpt lat="14.443350338765056" lon="-90.052970869710023">
+  <name>163-12</name>
+</wpt>
+<wpt lat="14.446427200556601" lon="-90.056233737010871">
+  <name>163-13</name>
+</wpt>
+<wpt lat="14.445880328770333" lon="-90.053769473594954">
+  <name>163-14</name>
+</wpt>
+<wpt lat="14.446084715352866" lon="-90.054242931612364">
+  <name>163-15</name>
+</wpt>
+<wpt lat="14.446626062690941" lon="-90.054163071223883">
+  <name>163-16</name>
+</wpt>
+<wpt lat="14.448051236116713" lon="-90.053330241458355">
+  <name>163-17</name>
+</wpt>
+<wpt lat="14.448609150357793" lon="-90.05653036131109">
+  <name>163-18</name>
+</wpt>
+<wpt lat="14.449144967667669" lon="-90.057317556568975">
+  <name>163-19</name>
+</wpt>
+<wpt lat="14.45043755256471" lon="-90.05287389638147">
+  <name>163-20</name>
+</wpt>
+</gpx>
