@@ -881,13 +881,6 @@ roofs_by_cluster <- 20
 sampled_roofs <- available_roofs %>%
   # Ignore clusters already sampled
   filter(!cluster %in% sampled_roofs_clusters) %>%
-  # Cluster specific fixes
-  mutate(
-    times = case_when(
-      cluster == 73 ~ times - 1L,
-      TRUE ~ times
-    )
-  ) %>%
   # By cluster
   split(.$cluster) %>%
   # Sample a subset
@@ -904,12 +897,7 @@ sampled_roofs <- available_roofs %>%
   # Add house id
   map(
     mutate,
-    name = 1:n(),
-    # Specific fixes
-    name = case_when(
-      cluster == 73 ~ name + 20L,
-      TRUE ~ name
-    )
+    name = 1:n()
   ) %>%
   # Add left/right pick
   map(
