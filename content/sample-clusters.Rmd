@@ -17,6 +17,7 @@ library(package = "readxl")
 library(package = "raster")
 library(package = "rgeos")
 library(package = "maptools")
+library(package = "sf")
 library(package = "tidyverse")
 
 # Configure knitr
@@ -599,7 +600,7 @@ suitable_clusters %>%
 
 ```{r nearby-services}
 # Read services recorded for Jalapa
-services <- sf::read_sf(
+services <- read_sf(
   dsn = "data/shapefiles/services/health-services.shp",
   crs = "+init=epsg:4326"
 )
@@ -607,8 +608,8 @@ services <- sf::read_sf(
 # Get data for relevant health related services
 health_services <- services %>%
   # Remove services in excluded areas
-  sf::st_difference(
-    sf::st_as_sf(excluded_hull, crs = "+init=epsg:4326")
+  st_difference(
+    st_as_sf(excluded_hull, crs = "+init=epsg:4326")
   ) %>%
   mutate(
     servicio = tolower(servicio),
@@ -630,7 +631,7 @@ health_services <- services %>%
   ) %>%
   # Add coordinates as regular variables
   bind_cols(
-    sf::st_coordinates(.$geometry) %>%
+    st_coordinates(.$geometry) %>%
       as_tibble() %>%
       set_names(c("serv_long", "serv_lat"))
   )
