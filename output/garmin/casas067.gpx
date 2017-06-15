@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.797551051999985" minlon="-89.952409467240102" maxlat="14.799474775897000" maxlon="-89.947070229838900"/></metadata>                
+<wpt lat="14.797715459188806" lon="-89.9470702298389">
+  <name>067-01</name>
+</wpt>
+<wpt lat="14.797551051999985" lon="-89.947212837675494">
+  <name>067-02</name>
+</wpt>
+<wpt lat="14.797875397661088" lon="-89.947366854138991">
+  <name>067-03</name>
+</wpt>
+<wpt lat="14.79808497203247" lon="-89.947258472183194">
+  <name>067-04</name>
+</wpt>
+<wpt lat="14.798371757686176" lon="-89.947104455719696">
+  <name>067-05</name>
+</wpt>
+<wpt lat="14.798289031094217" lon="-89.947982919992967">
+  <name>067-06</name>
+</wpt>
+<wpt lat="14.798586846677599" lon="-89.947874538037169">
+  <name>067-07</name>
+</wpt>
+<wpt lat="14.79807394180745" lon="-89.948764410937372">
+  <name>067-08</name>
+</wpt>
+<wpt lat="14.798068426694718" lon="-89.949312025029798">
+  <name>067-09</name>
+</wpt>
+<wpt lat="14.798250425340507" lon="-89.949163712879766">
+  <name>067-10</name>
+</wpt>
+<wpt lat="14.79782024647707" lon="-89.949933795197225">
+  <name>067-11</name>
+</wpt>
+<wpt lat="14.79788091277873" lon="-89.949580127762545">
+  <name>067-12</name>
+</wpt>
+<wpt lat="14.798868116575287" lon="-89.949928090883773">
+  <name>067-13</name>
+</wpt>
+<wpt lat="14.799039084374044" lon="-89.949637170897162">
+  <name>067-14</name>
+</wpt>
+<wpt lat="14.799474775897" lon="-89.950247532437686">
+  <name>067-15</name>
+</wpt>
+<wpt lat="14.797814731357901" lon="-89.950806555157058">
+  <name>067-16</name>
+</wpt>
+<wpt lat="14.797551051999985" lon="-89.951291421801386">
+  <name>067-17</name>
+</wpt>
+<wpt lat="14.797754065037742" lon="-89.951154518278273">
+  <name>067-18</name>
+</wpt>
+<wpt lat="14.797930548831085" lon="-89.952409467240102">
+  <name>067-19</name>
+</wpt>
+<wpt lat="14.797638247470312" lon="-89.952272563716974">
+  <name>067-20</name>
+</wpt>
+</gpx>
