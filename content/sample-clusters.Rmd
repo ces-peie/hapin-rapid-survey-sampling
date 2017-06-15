@@ -844,6 +844,14 @@ clean_roofs <- all_roofs %>%
   # Exclude duplicates
   filter(
     !duplicated(paste(cluster, rooftop))
+  ) %>%
+  # Add sampling times
+  left_join(
+    select(suitable_clusters, cluster = correlative, times)
+  ) %>%
+  # Keep only suitable clusters
+  filter(
+    !is.na(times)
   )
 
 
@@ -865,7 +873,11 @@ sampled_roofs <- clean_roofs %>%
   map(
     ~subset(
       .x,
-      subset = 1:nrow(.x) %in% sample(1:nrow(.x), roofs_by_cluster, replace = FALSE)
+      subset = 1:nrow(.x) %in% sample(
+        1:nrow(.x),
+        roofs_by_cluster * first(times),
+        replace = FALSE
+      )
     )
   ) %>%
   # Add house id
