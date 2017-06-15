@@ -881,6 +881,13 @@ roofs_by_cluster <- 20
 sampled_roofs <- available_roofs %>%
   # Ignore clusters already sampled
   filter(!cluster %in% sampled_roofs_clusters) %>%
+  # Cluster specific fixes
+  mutate(
+    times = case_when(
+      cluster == 73 ~ times - 1L,
+      TRUE ~ times
+    )
+  ) %>%
   # By cluster
   split(.$cluster) %>%
   # Sample a subset
@@ -896,8 +903,13 @@ sampled_roofs <- available_roofs %>%
   ) %>%
   # Add house id
   map(
-    cbind,
-    name = as.character(1:roofs_by_cluster)
+    mutate,
+    name = 1:n(),
+    # Specific fixes
+    name = case_when(
+      cluster == 73 ~ name + 20L,
+      TRUE ~ name
+    )
   ) %>%
   # Add left/right pick
   map(
@@ -925,13 +937,13 @@ if(!is.null(sampled_roofs)){
   write_csv(all_sampled_roofs, path = "data/roofs/sampled/casas-elegidas.csv")
   
   # Export as individual GPX files for use in the gps receivers
-  sampled_roofs %>%
+  all_sampled_roofs %>%
     mutate(
       cluster = stringr::str_pad(cluster, width = 3, side = "left", pad = "0"),
       name = stringr::str_pad(name, width = 2, side = "left", pad = "0"),
       name = paste(cluster, name, sep = "-")
     ) %>%
-    split(sampled_roofs$cluster) %>%
+    split(.$cluster) %>%
     walk(
       ~write_sf(
         obj = select(.x, name, geometry),
