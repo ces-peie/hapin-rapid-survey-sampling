@@ -141,13 +141,16 @@ jalapa_metro <- readShapePoly(
 ) %>%
   subset(NAME == "JALAPA")
 
-# Get the convex hull containing the excluded comunities and Jalapa "metro"
-excluded_hull <- excluded_communities %>%
+# Set Xalapam area
+xalapam <- excluded_communities %>%
   gConvexHull() %>%
-  # Join with Jalapa "metro" area
-  gUnion(jalapa_metro) %>%
   # Intersect with study municipalities
   gIntersection(study_munis)
+
+# Get the convex hull containing the excluded comunities and Jalapa "metro"
+excluded_hull <- xalapam %>%
+  # Join with Jalapa "metro" area
+  gUnion(jalapa_metro)
 
 # Subtract excluded areas
 study_area <- gDifference(study_munis, excluded_hull)
