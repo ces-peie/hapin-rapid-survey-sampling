@@ -65,6 +65,8 @@ response <- 2/3                                # proportion contacted included
 suitable <- 1/5                                # proportion of suitable clusters
 adj_clusters <- ceiling(n_clusters / suitable) # Adjusted number of clusters
 
+# Clusters for Xalapam area 
+xalapam_n_clusters <- ceiling( ceiling( 150 / cluster_size ) / suitable )
 ```
 
 
@@ -76,6 +78,9 @@ The rapid assessment will be performed in some municipalities of the Jalapa depa
 Below I show the administrative limits of Jalapa (**Fig. 1**),
 the selected municipalities (**Fig. 2**),
 and some areas that are to be excluded (**Fig. 3**).
+The Xalapam area (shaded with lines in **Fig. 3**) was not included in the
+initial rapid assessment due to unwillingness of their leaders to participate,
+but will be included in a second rapid assessment stage.
 
 
 ```{r get-limits-data}
@@ -136,13 +141,16 @@ jalapa_metro <- readShapePoly(
 ) %>%
   subset(NAME == "JALAPA")
 
-# Get the convex hull containing the excluded comunities and Jalapa "metro"
-excluded_hull <- excluded_communities %>%
+# Set Xalapam area
+xalapam <- excluded_communities %>%
   gConvexHull() %>%
-  # Join with Jalapa "metro" area
-  gUnion(jalapa_metro) %>%
   # Intersect with study municipalities
   gIntersection(study_munis)
+
+# Get the convex hull containing the excluded comunities and Jalapa "metro"
+excluded_hull <- xalapam %>%
+  # Join with Jalapa "metro" area
+  gUnion(jalapa_metro)
 
 # Subtract excluded areas
 study_area <- gDifference(study_munis, excluded_hull)
@@ -188,7 +196,8 @@ text(
 # Excluded areas
 plot(jalapa, col = "grey90")
 plot(study_munis, col = "white", add = TRUE)
-plot(excluded_hull, col = "grey40", add = TRUE)
+plot(jalapa_metro, col = "grey40", add = TRUE)
+plot(xalapam, density = 10, angle = 45, add = TRUE)
 title("Fig. 3: Excluded areas")
 text(
   coordinates(study_munis) - matrix(c(0, -0.02, 0, 0, 0, 0.05, 0, 0), ncol = 2),
@@ -237,11 +246,21 @@ cluster_cells <- aggregate(study_density, fact = cluster_side, fun = sum)
 # Percent with enough estimated households
 cluster_ecdf <- ecdf(cluster_cells[])
 percent_small <- ceiling(cluster_ecdf(cluster_size / response)*100)
+
+# Add Xalapam density
+study_density <- rasterize(
+  gUnion(study_area, xalapam), pop_density, mask = TRUE
+)
+
+# Get cells for Xalapam sampling
+xalapam_density <- rasterize(xalapam, pop_density, mask = TRUE)
+xalapam_cells <- aggregate(xalapam_density, fact = cluster_side, fun = sum)
 ```
 
 
 In **Fig. 4** I show the raw population density from the WorldPop model,
-masked by the excluded areas (in dark grey).
+masked by the excluded area (in dark grey).
+The Xalapam area is shown outlined in blue.
 The highest population densities
 (~`r round(max(study_density[], na.rm = TRUE))` persons per household, pph)
 are found close to (and inside) the excluded Jalapa "metropolitan" area.
@@ -258,8 +277,9 @@ par(mar = c(2, 2, 3, 1))
 plot(study_density)
 title("Fig. 4: Raw population density\nand study areas")
 plot(jalapa, add = TRUE, asp = 1)
-plot(excluded_hull, add = TRUE, col = "grey20", asp = 1)
+plot(jalapa_metro, add = TRUE, col = "grey20", asp = 1)
 lines(study_munis, col = "red")
+lines(xalapam, add = TRUE, col = "blue", asp = 1)
 par(dpar)
 
 # Raw density
@@ -361,6 +381,61 @@ cluster_polygons <- SpatialPolygonsDataFrame(
 ```
 
 
+
+```{r sample-xalapan-clusters}
+# Set seed for reproducibility
+set.seed(2017-10)
+
+# Half width
+hs <- res(xalapam_cells)/2
+
+# Calculate weights
+xalapam_weights <- xalapam_cells
+xalapam_weights[is.na(xalapam_weights[])] <- 0     # set NAs to 0 for sampling
+xalapam_weights <- xalapam_weights / max(xalapam_weights[]) # scale to probs
+
+# First stage of sampling: sample clusters
+sampled_xalapam_clusters <- sample(
+  x = seq_len(length.out = length(xalapam_weights[])),
+  size = xalapam_n_clusters,
+  replace = TRUE,
+  prob = xalapam_weights[]
+)
+
+# Get locations of sample clusters
+xalapam_centers <- xyFromCell(xalapam_cells, sampled_xalapam_clusters)
+
+# Get polygons for each cluster
+xalapam_cells[is.na(xalapam_cells)] <- 0
+xalapam_polygons <- rasterToPolygons(
+  x = xalapam_cells
+)[unique(sampled_xalapam_clusters), ]
+
+
+# Collect data for sample clusters
+xalapam_clusters <- xalapam_polygons@data %>%
+  rownames_to_column(var = "cell_id") %>%
+  mutate(
+    correlative = seq(1, n()),
+    times = as.vector(table(sampled_xalapam_clusters)),
+    households = layer / household_size
+  ) %>%
+  select(correlative, cell_id, times, population = layer, households) %>%
+  bind_cols(as_tibble(unique(xalapam_centers))) %>%
+  rename(lat = y, long = x)
+
+# Force rownames on cluster data
+rownames(xalapam_clusters) <- xalapam_clusters$cell_id
+
+
+# Edit clusters data
+xalapam_cluster_polygons <- SpatialPolygonsDataFrame(
+  Sr = xalapam_polygons,
+  data = xalapam_clusters,
+  match.ID = TRUE
+)
+```
+
 A very common approach to spatial sampling uses *geographically balanced sampling*,
 which ensures equally-sized areas are represented in the sampling
 (usually through some sort of tesselation).
@@ -373,6 +448,7 @@ but this should not have a big impact on representativity since most of the stud
 area is so sparesly populated[^3].
 In **Fig. 6** I show the aggregated population density and the randomly
 selected clusters.
+Clusters selected for the Xalapam area are shown in blue.
 
 
 [^3]: A spatially balanced sample could prove more useful for the second sampling
@@ -391,16 +467,24 @@ representing selected clusters with low or high estimated number of households.
 ```{r clusters-density, dpi=600, out.width="1\\linewidth", fig.width=9, fig.height=6.5}
 dpar <- par()
 par(mar = c(2, 2, 3, 1))
-plot(cluster_cells)
+aggregate(study_density, fact = cluster_side, fun = sum) %>% plot
 title("Fig. 6: Aggregated population density and selected clusters")
 plot(jalapa, add = TRUE, asp = 1)
-lines(excluded_hull, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
+lines(jalapa_metro, col = rgb(0, 0, 1, 0.5), add = TRUE, asp = 1)
+lines(xalapam, col = "blue", add = TRUE, asp = 1)
 plot(cluster_polygons, add = TRUE, asp = 1)
+lines(xalapam_cluster_polygons, add = TRUE, asp = 1, col = "blue")
 text(
   coordinates(cluster_polygons),
   labels = cluster_polygons$correlative,
   cex = 0.4, col = "red"
 )
+text(
+  coordinates(xalapam_cluster_polygons),
+  labels = xalapam_cluster_polygons$correlative,
+  cex = 0.4, col = "blue"
+)
+
 par(dpar)
 ```
 
@@ -418,8 +502,18 @@ clusters %>%
     ) %>%
   write_csv(path = "output/clusters.csv")
 
+
+xalapam_cluster_polygons %>%
+  as.data.frame %>%
+  mutate(
+    tipo = "",
+    suficientes = "",
+    comentario = ""
+  ) %>%
+  write_csv(path = "output/xalapam_clusters.csv")
+
 # Write cluster polygons
-writeSpatialShape(cluster_polygons, fn = "output/clusters/clusters")
+writeSpatialShape(xalapam_cluster_polygons, fn = "output/clusters/xalapam_clusters")
 
 # Function to get cluster tiles
 get_tile <- function(cluster, save_path, zoom = 16){
@@ -553,6 +647,114 @@ suitable <- assessment %>%
     ar_assesment == 1,
     correlative != 57
   )
+
+```
+
+
+```{r xalapam-cluster-suitability}
+
+# evaluated clusters
+xalapam_evaluated <- readxl::read_excel("output/xalapam_clusters.xlsx")
+
+# Select suitable clusters
+xalapam_suitable <- st_as_sf(xalapam_cluster_polygons) %>%
+  left_join(
+    xalapam_evaluated %>%
+      mutate(
+        correlative = as.integer(correlative),
+        cell_id = as.character(cell_id)
+      ) %>%
+      select(correlative, cell_id, suficientes)
+  ) %>%
+  filter(suficientes == 1)
+
+# Save suitable clusters
+write_sf(xalapam_suitable, "output/clusters/xalapam_suitable.shp")
+
+```
+
+
+
+
+```{r xalapam-rooftops}
+# Read roofs data
+xalapam_roofs <- readxl::read_excel("data/roofs/Xalapam.xlsx")
+
+# Write for use in qgis
+xalapam_roofs %>% write_csv("data/roofs/xalapam_roofs.csv")
+
+
+#------------------------------------------------------------------------------*
+# Sample roofs
+#------------------------------------------------------------------------------*
+
+set.seed(2017-10)
+
+selected_roofs <- xalapam_roofs %>%
+  select(correlative = Cluster, roof = Id, long = POINT_X, lat = POINT_Y) %>%
+  left_join(
+    xalapam_suitable %>%
+      as.data.frame() %>%
+      select(correlative, times)
+  ) %>%
+  group_by(correlative) %>%
+  slice( sample(x = 1:n(), size = first(times) * 20) ) %>%
+  mutate(
+    id = 1:n()
+  ) %>%
+  ungroup() %>%
+  select(-times)
+
+# Write selected roofs
+selected_roofs %>% write_csv("data/roofs/xalapam_sampled_roofs.csv")
+
+
+
+#------------------------------------------------------------------------------*
+# Plot roofs ----
+#------------------------------------------------------------------------------*
+
+plot(xalapam)
+
+xalapam_cluster_polygons %>%
+  subset(
+    correlative <= 10 &
+    correlative %in% xalapam_suitable$correlative
+  ) %>%
+  lines(col = "blue")
+
+points(xalapam_roofs$POINT_X, xalapam_roofs$POINT_Y, pch = ".", col = "blue")
+points(selected_roofs$long, selected_roofs$lat, pch = ".", col = "red")
+
+
+
+#------------------------------------------------------------------------------*
+# Write gpx files ----
+#------------------------------------------------------------------------------*
+
+# Export as individual GPX files for use in the gps receivers
+selected_roofs %>%
+  mutate(
+    correlative = correlative + 200,
+    cluster = stringr::str_pad(correlative, width = 3, side = "left", pad = "0"),
+    name = stringr::str_pad(id, width = 2, side = "left", pad = "0"),
+    name = paste(cluster, name, sep = "-"),
+   # Build points
+    points = map2(long, lat, ~st_point(c(.x, .y)))
+  ) %>%
+  st_set_geometry(st_sfc(.$points)) %>%
+  st_as_sf() %>%
+  split(.$cluster) %>%
+  walk(
+    ~write_sf(
+      obj = select(.x, name, geometry),
+      dsn = paste0("output/garmin/xalapam/casas", first(.x$cluster), ".gpx"),
+      driver = "GPX",
+      delete_dsn = TRUE
+    )
+  )
+  
+
 
 ```
 
