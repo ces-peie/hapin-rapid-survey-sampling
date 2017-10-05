@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.591767958600000" minlon="-90.115660684600002" maxlat="14.601651287799999" maxlon="-90.105133949099994"/></metadata>                
+<wpt lat="14.5965116521" lon="-90.106119997799993">
+  <name>204-01</name>
+</wpt>
+<wpt lat="14.5951068183" lon="-90.114823114399996">
+  <name>204-02</name>
+</wpt>
+<wpt lat="14.596861908699999" lon="-90.105636491300004">
+  <name>204-03</name>
+</wpt>
+<wpt lat="14.592137251" lon="-90.110966484">
+  <name>204-04</name>
+</wpt>
+<wpt lat="14.5974405937" lon="-90.115660684600002">
+  <name>204-05</name>
+</wpt>
+<wpt lat="14.601651287799999" lon="-90.105133949099994">
+  <name>204-06</name>
+</wpt>
+<wpt lat="14.6009774245" lon="-90.107265946200002">
+  <name>204-07</name>
+</wpt>
+<wpt lat="14.5917679586" lon="-90.108765958399999">
+  <name>204-08</name>
+</wpt>
+<wpt lat="14.592388522" lon="-90.109824342699994">
+  <name>204-09</name>
+</wpt>
+<wpt lat="14.597653793399999" lon="-90.107878895400006">
+  <name>204-10</name>
+</wpt>
+<wpt lat="14.596858101600001" lon="-90.105461363">
+  <name>204-11</name>
+</wpt>
+<wpt lat="14.599884776" lon="-90.108278644799995">
+  <name>204-12</name>
+</wpt>
+<wpt lat="14.5919278584" lon="-90.109199972100001">
+  <name>204-13</name>
+</wpt>
+<wpt lat="14.5972312011" lon="-90.107627624299994">
+  <name>204-14</name>
+</wpt>
+<wpt lat="14.5926854788" lon="-90.110243127800004">
+  <name>204-15</name>
+</wpt>
+<wpt lat="14.5974177508" lon="-90.108137780700005">
+  <name>204-16</name>
+</wpt>
+<wpt lat="14.591992579699999" lon="-90.109333221900002">
+  <name>204-17</name>
+</wpt>
+<wpt lat="14.598746441899999" lon="-90.107985495199998">
+  <name>204-18</name>
+</wpt>
+<wpt lat="14.5977147076" lon="-90.105910605199995">
+  <name>204-19</name>
+</wpt>
+<wpt lat="14.5976499862" lon="-90.109481700299995">
+  <name>204-20</name>
+</wpt>
+</gpx>

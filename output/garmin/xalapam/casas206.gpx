@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 2.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="14.658118614399999" minlon="-90.147844450899996" maxlat="14.666737973900000" maxlon="-90.140294897100006"/></metadata>                
+<wpt lat="14.663399114200001" lon="-90.145925653600003">
+  <name>206-01</name>
+</wpt>
+<wpt lat="14.6639701849" lon="-90.142202273">
+  <name>206-02</name>
+</wpt>
+<wpt lat="14.6651656261" lon="-90.144642648200005">
+  <name>206-03</name>
+</wpt>
+<wpt lat="14.664906740699999" lon="-90.145202297400004">
+  <name>206-04</name>
+</wpt>
+<wpt lat="14.665592025500001" lon="-90.145099504699999">
+  <name>206-05</name>
+</wpt>
+<wpt lat="14.6656948182" lon="-90.143755585099996">
+  <name>206-06</name>
+</wpt>
+<wpt lat="14.663387692800001" lon="-90.144338077200004">
+  <name>206-07</name>
+</wpt>
+<wpt lat="14.659542483799999" lon="-90.140492868199999">
+  <name>206-08</name>
+</wpt>
+<wpt lat="14.6657633467" lon="-90.143984013400001">
+  <name>206-09</name>
+</wpt>
+<wpt lat="14.6587658278" lon="-90.141539831100005">
+  <name>206-10</name>
+</wpt>
+<wpt lat="14.6644080057" lon="-90.147322873099995">
+  <name>206-11</name>
+</wpt>
+<wpt lat="14.6667379739" lon="-90.146302560199999">
+  <name>206-12</name>
+</wpt>
+<wpt lat="14.658118614399999" lon="-90.140294897100006">
+  <name>206-13</name>
+</wpt>
+<wpt lat="14.66438897" lon="-90.147844450899996">
+  <name>206-14</name>
+</wpt>
+<wpt lat="14.662873729299999" lon="-90.144623612499998">
+  <name>206-15</name>
+</wpt>
+<wpt lat="14.662241744399999" lon="-90.143234007299995">
+  <name>206-16</name>
+</wpt>
+<wpt lat="14.663916885" lon="-90.141977651900007">
+  <name>206-17</name>
+</wpt>
+<wpt lat="14.664548869800001" lon="-90.146405352900004">
+  <name>206-18</name>
+</wpt>
+<wpt lat="14.6643927772" lon="-90.144604576800006">
+  <name>206-19</name>
+</wpt>
+<wpt lat="14.6651313619" lon="-90.145369811500004">
+  <name>206-20</name>
+</wpt>
+</gpx>
